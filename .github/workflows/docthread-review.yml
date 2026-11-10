@@ -1,0 +1,62 @@
+name: DocThread review
+
+on:
+  pull_request:
+    paths:
+      - '*.md'
+      - '**/*.md'
+      - '.docthread/**'
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  review:
+    name: Review status
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pull request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Count DocThread review state
+        id: docthread
+        env:
+          DOCTHREAD_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          DOCTHREAD_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          DOCTHREAD_PROVIDER: github
+          DOCTHREAD_APP_URL: https://wonderful-water-098ab6803.7.azurestaticapps.net/
+          DOCTHREAD_REPOSITORY: ${{ github.repository }}
+          DOCTHREAD_REF: ${{ github.event.pull_request.head.sha }}
+          DOCTHREAD_SUMMARY_PATH: ${{ runner.temp }}/docthread-review-summary.md
+        run: node .github/scripts/docthread-review.mjs
+
+      - name: Publish DocThread check
+        uses: actions/github-script@v7
+        env:
+          REVIEW_TITLE: ${{ steps.docthread.outputs.title }}
+          REVIEW_OPEN: ${{ steps.docthread.outputs.open }}
+          REVIEW_MISSING: ${{ steps.docthread.outputs.missing }}
+          REVIEW_SUMMARY_PATH: ${{ steps.docthread.outputs.summary_path }}
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync(process.env.REVIEW_SUMMARY_PATH, 'utf8');
+            const open = Number(process.env.REVIEW_OPEN);
+            const missing = Number(process.env.REVIEW_MISSING);
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'DocThread review',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'completed',
+              conclusion: open === 0 && missing === 0 ? 'success' : 'neutral',
+              details_url: context.payload.pull_request.html_url,
+              output: {
+                title: process.env.REVIEW_TITLE,
+                summary,
+              },
+            });

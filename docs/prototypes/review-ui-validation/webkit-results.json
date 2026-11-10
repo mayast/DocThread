@@ -1,0 +1,428 @@
+{
+  "generatedAt": "2026-09-11T08:41:05.876Z",
+  "platform": "win32",
+  "engines": [
+    {
+      "engine": "webkit",
+      "passed": true,
+      "scenarios": [
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "passed": true
+        },
+        {
+          "scenario": "long comment quotes do not overlap labels or authors",
+          "passed": true
+        },
+        {
+          "scenario": "unboxed intent and alias labels keep primary comment actions readable",
+          "passed": true
+        },
+        {
+          "scenario": "comment overflow menu preserves focus, layout, copy fallback and deletion confirmation",
+          "passed": true
+        },
+        {
+          "scenario": "read-only thread actions retain their permission boundaries",
+          "passed": true
+        },
+        {
+          "scenario": "passage alignment, numbered links and responsive review navigation",
+          "passed": true
+        },
+        {
+          "scenario": "paired navigation is passive and respects the selected sort",
+          "passed": true
+        },
+        {
+          "scenario": "crowded comments keep numerical order and use the closest available row",
+          "passed": true
+        },
+        {
+          "scenario": "mouse and multi-block draft highlights follow the composer",
+          "passed": true
+        },
+        {
+          "scenario": "overlapping, resolved and orphaned passages retain distinct links",
+          "passed": true
+        },
+        {
+          "scenario": "draft alignment preserves mouse cancel and quoted source text",
+          "passed": true
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "passed": true
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "passed": true
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "passed": true
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "passed": true
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "passed": true
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "passed": true
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "passed": true
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "passed": true
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "passed": true
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "passed": true
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "passed": true
+        }
+      ],
+      "accessibility": [
+        {
+          "scenario": "open keyboard comment composer",
+          "violations": []
+        },
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "violations": []
+        },
+        {
+          "scenario": "long comment quotes 1280px 1x",
+          "violations": []
+        },
+        {
+          "scenario": "long comment quotes 390px 1x",
+          "violations": []
+        },
+        {
+          "scenario": "long comment quotes 1280px 2x",
+          "violations": []
+        },
+        {
+          "scenario": "long comment quotes do not overlap labels or authors",
+          "violations": []
+        },
+        {
+          "scenario": "unboxed card actions 1280px 1x light",
+          "violations": []
+        },
+        {
+          "scenario": "unboxed card actions 390px 1x light",
+          "violations": []
+        },
+        {
+          "scenario": "unboxed card actions 320px 1x dark",
+          "violations": []
+        },
+        {
+          "scenario": "unboxed card actions 1280px 2x dark",
+          "violations": []
+        },
+        {
+          "scenario": "unboxed intent and alias labels keep primary comment actions readable",
+          "violations": []
+        },
+        {
+          "scenario": "comment action menu keyboard",
+          "violations": []
+        },
+        {
+          "scenario": "comment link clipboard fallback",
+          "violations": []
+        },
+        {
+          "scenario": "comment overflow menu preserves focus, layout, copy fallback and deletion confirmation",
+          "violations": []
+        },
+        {
+          "scenario": "read-only comment action menu",
+          "violations": []
+        },
+        {
+          "scenario": "read-only thread actions retain their permission boundaries",
+          "violations": []
+        },
+        {
+          "scenario": "aligned comments desktop",
+          "violations": []
+        },
+        {
+          "scenario": "aligned comments 1280px 2x",
+          "violations": []
+        },
+        {
+          "scenario": "aligned comments 900px 1x",
+          "violations": []
+        },
+        {
+          "scenario": "aligned comments 390px 1x",
+          "violations": []
+        },
+        {
+          "scenario": "numbered passage navigation after filtering",
+          "violations": []
+        },
+        {
+          "scenario": "passage alignment, numbered links and responsive review navigation",
+          "violations": []
+        },
+        {
+          "scenario": "quiet paired navigation desktop",
+          "violations": []
+        },
+        {
+          "scenario": "passage return 390px 1x light",
+          "violations": []
+        },
+        {
+          "scenario": "passage return 320px 1x dark",
+          "violations": []
+        },
+        {
+          "scenario": "passage return 1280px 2x dark",
+          "violations": []
+        },
+        {
+          "scenario": "paired navigation is passive and respects the selected sort",
+          "violations": []
+        },
+        {
+          "scenario": "crowded selection numerical order",
+          "violations": []
+        },
+        {
+          "scenario": "crowded selection expanded reply",
+          "violations": []
+        },
+        {
+          "scenario": "crowded draft ordered stack",
+          "violations": []
+        },
+        {
+          "scenario": "crowded selection later passage",
+          "violations": []
+        },
+        {
+          "scenario": "off-screen selection reveals passage and card together",
+          "violations": []
+        },
+        {
+          "scenario": "crowded selection after document scroll",
+          "violations": []
+        },
+        {
+          "scenario": "crowded comments keep numerical order and use the closest available row",
+          "violations": []
+        },
+        {
+          "scenario": "persistent formatted draft selection",
+          "violations": []
+        },
+        {
+          "scenario": "mouse and multi-block draft highlights follow the composer",
+          "violations": []
+        },
+        {
+          "scenario": "shared passage comments dark",
+          "violations": []
+        },
+        {
+          "scenario": "shared passage comments dark 320px",
+          "violations": []
+        },
+        {
+          "scenario": "overlapping, resolved and orphaned passages retain distinct links",
+          "violations": []
+        },
+        {
+          "scenario": "aligned draft desktop",
+          "violations": []
+        },
+        {
+          "scenario": "aligned draft mobile",
+          "violations": []
+        },
+        {
+          "scenario": "draft alignment preserves mouse cancel and quoted source text",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved document editor",
+          "violations": []
+        },
+        {
+          "scenario": "document recovery comparison dialog",
+          "violations": []
+        },
+        {
+          "scenario": "source-save confirmation dialog",
+          "violations": []
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "violations": []
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved-input source-switch dialog",
+          "violations": []
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "violations": []
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "violations": []
+        },
+        {
+          "scenario": "attachment feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "discussion feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "insights displayed findings keyboard surface",
+          "violations": []
+        },
+        {
+          "scenario": "insights actual outcomes desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "violations": []
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "violations": []
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "violations": []
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "violations": []
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy and export retry desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 390",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 320",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity paused",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "violations": []
+        }
+      ],
+      "blockedRequests": [],
+      "error": null
+    }
+  ]
+}

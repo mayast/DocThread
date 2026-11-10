@@ -1,0 +1,200 @@
+{
+  "capturedAt": "2026-09-11T12:33:13.071Z",
+  "beforeRef": "f24823387fa1c122028246577a56b63b72483ea4",
+  "afterRef": "ae459c08b7c1521ed8afbc2df05c9c2b0d1f74dc",
+  "platform": "win32",
+  "browser": "Chromium 153.0.8010.12",
+  "colorScheme": "light",
+  "deviceScaleFactor": 1,
+  "fixtureSha256": "86fc329234d2f4b85b3da204d97f3d9ad777f9689ca0f6bde33dbb1c8f45e4e7",
+  "syntheticProviderData": true,
+  "liveProviderAccess": false,
+  "captureCodeChanges": false,
+  "evidence": [
+    {
+      "label": "before",
+      "scene": "cards",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "capture": "viewport",
+      "screenshot": "pr151-before-cards-1280.png",
+      "pngWidth": 1280,
+      "pngHeight": 900,
+      "sha256": "4ae8dd1dbf712b89106533f540660a6f6424d93b6d8321b8b97824d13e5cfc00",
+      "fixtureStateHash": "c50b61dc72410ba43a50aea8f0348c7f121d4f4f6949a2576975167c3fd9d315",
+      "observation": [
+        {
+          "intent": "Question",
+          "quoteOverflow": "visible",
+          "quoteVisibleHeight": 55,
+          "quoteContentHeight": 223
+        },
+        {
+          "intent": "Blocking",
+          "quoteOverflow": "visible",
+          "quoteVisibleHeight": 55,
+          "quoteContentHeight": 223
+        }
+      ],
+      "escapedRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "label": "before",
+      "scene": "cards",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "capture": "comments panel",
+      "screenshot": "pr151-before-cards-390.png",
+      "pngWidth": 390,
+      "pngHeight": 731,
+      "sha256": "f73a8674dca658268b5d7826bd7f08c3a0fd49e7a26f07e0129b62db48c56199",
+      "fixtureStateHash": "c50b61dc72410ba43a50aea8f0348c7f121d4f4f6949a2576975167c3fd9d315",
+      "observation": [
+        {
+          "intent": "Question",
+          "quoteOverflow": "visible",
+          "quoteVisibleHeight": 55,
+          "quoteContentHeight": 203
+        },
+        {
+          "intent": "Blocking",
+          "quoteOverflow": "visible",
+          "quoteVisibleHeight": 55,
+          "quoteContentHeight": 203
+        }
+      ],
+      "escapedRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "label": "before",
+      "scene": "draft",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "capture": "viewport",
+      "screenshot": "pr151-before-draft-1280.png",
+      "pngWidth": 1280,
+      "pngHeight": 900,
+      "sha256": "346f0632cdd229f68e89a617c74311ed1233c4f299d17754fb2ea35e662d209d",
+      "fixtureStateHash": "95f575d604e567cdafb56afa601d975173e848d7bd5c1efb23daf42a0f2208be",
+      "observation": {
+        "selectedText": "The release plan needs a documented rollback.",
+        "persistentHighlight": false,
+        "composerFocused": true
+      },
+      "escapedRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "label": "after",
+      "scene": "cards",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "capture": "viewport",
+      "screenshot": "pr151-after-cards-1280.png",
+      "pngWidth": 1280,
+      "pngHeight": 900,
+      "sha256": "cde37975d820393b02d0da448df58c5a17fdbffb37e3d9ebb52fb22ca6fc9b9f",
+      "fixtureStateHash": "c50b61dc72410ba43a50aea8f0348c7f121d4f4f6949a2576975167c3fd9d315",
+      "observation": [
+        {
+          "intent": "Question",
+          "quoteOverflow": "hidden",
+          "quoteVisibleHeight": 39,
+          "quoteContentHeight": 254
+        },
+        {
+          "intent": "Blocking",
+          "quoteOverflow": "hidden",
+          "quoteVisibleHeight": 39,
+          "quoteContentHeight": 254
+        }
+      ],
+      "escapedRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "label": "after",
+      "scene": "cards",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "capture": "comments panel",
+      "screenshot": "pr151-after-cards-390.png",
+      "pngWidth": 390,
+      "pngHeight": 569,
+      "sha256": "16173e42c8abf14fd89d1a4b2187ed1af7ae8a78c8fbffeee88d714090bbccf8",
+      "fixtureStateHash": "c50b61dc72410ba43a50aea8f0348c7f121d4f4f6949a2576975167c3fd9d315",
+      "observation": [
+        {
+          "intent": "Question",
+          "quoteOverflow": "hidden",
+          "quoteVisibleHeight": 39,
+          "quoteContentHeight": 215
+        },
+        {
+          "intent": "Blocking",
+          "quoteOverflow": "hidden",
+          "quoteVisibleHeight": 39,
+          "quoteContentHeight": 215
+        }
+      ],
+      "escapedRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "label": "after",
+      "scene": "draft",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "capture": "viewport",
+      "screenshot": "pr151-after-draft-1280.png",
+      "pngWidth": 1280,
+      "pngHeight": 900,
+      "sha256": "5f2f6fb3ef1f6c6c8b999f5df81fdc12b06d50f32c4a3b45584f1d742af96511",
+      "fixtureStateHash": "95f575d604e567cdafb56afa601d975173e848d7bd5c1efb23daf42a0f2208be",
+      "observation": {
+        "selectedText": "The release plan needs a documented rollback.",
+        "persistentHighlight": true,
+        "composerFocused": true
+      },
+      "escapedRequests": 0,
+      "pageErrors": 0
+    },
+    {
+      "label": "after",
+      "scene": "insights",
+      "viewport": {
+        "width": 1280,
+        "height": 1080
+      },
+      "capture": "viewport",
+      "screenshot": "pr151-after-insights-1280.png",
+      "pngWidth": 1280,
+      "pngHeight": 1080,
+      "sha256": "9dc9d30e50c463afb3fe1065371bedabeac4fe90cb92bb2b420490b84699f731",
+      "fixtureStateHash": "4d97a000642aaf2e03e1c19c3a0c03fa2de5a882e9b6a7d805debced5bd71fae",
+      "observation": {
+        "observed": 11,
+        "pending": 7,
+        "posted": 2,
+        "applied": 1,
+        "dismissed": 1
+      },
+      "escapedRequests": 0,
+      "pageErrors": 0
+    }
+  ]
+}

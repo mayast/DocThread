@@ -1,0 +1,672 @@
+{
+  "generatedAt": "2026-09-09T16:15:20.722Z",
+  "platform": "win32",
+  "engines": [
+    {
+      "engine": "chromium",
+      "passed": true,
+      "scenarios": [
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "passed": true
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "passed": true
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "passed": true
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "passed": true
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "passed": true
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "passed": true
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "passed": true
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "passed": true
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "passed": true
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "passed": true
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "passed": true
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "passed": true
+        }
+      ],
+      "accessibility": [
+        {
+          "scenario": "open keyboard comment composer",
+          "violations": []
+        },
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved document editor",
+          "violations": []
+        },
+        {
+          "scenario": "document recovery comparison dialog",
+          "violations": []
+        },
+        {
+          "scenario": "source-save confirmation dialog",
+          "violations": []
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "violations": []
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved-input source-switch dialog",
+          "violations": []
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "violations": []
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "violations": []
+        },
+        {
+          "scenario": "attachment feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "discussion feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "insights displayed findings keyboard surface",
+          "violations": []
+        },
+        {
+          "scenario": "insights actual outcomes desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "violations": []
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "violations": []
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "violations": []
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "violations": []
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy and export retry desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 390",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 320",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity paused",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "violations": []
+        }
+      ],
+      "blockedRequests": [],
+      "error": null
+    },
+    {
+      "engine": "firefox",
+      "passed": true,
+      "scenarios": [
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "passed": true
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "passed": true
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "passed": true
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "passed": true
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "passed": true
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "passed": true
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "passed": true
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "passed": true
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "passed": true
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "passed": true
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "passed": true
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "passed": true
+        }
+      ],
+      "accessibility": [
+        {
+          "scenario": "open keyboard comment composer",
+          "violations": []
+        },
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved document editor",
+          "violations": []
+        },
+        {
+          "scenario": "document recovery comparison dialog",
+          "violations": []
+        },
+        {
+          "scenario": "source-save confirmation dialog",
+          "violations": []
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "violations": []
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved-input source-switch dialog",
+          "violations": []
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "violations": []
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "violations": []
+        },
+        {
+          "scenario": "attachment feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "discussion feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "insights displayed findings keyboard surface",
+          "violations": []
+        },
+        {
+          "scenario": "insights actual outcomes desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "violations": []
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "violations": []
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "violations": []
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "violations": []
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy and export retry desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 390",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 320",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity paused",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "violations": []
+        }
+      ],
+      "blockedRequests": [],
+      "error": null
+    },
+    {
+      "engine": "webkit",
+      "passed": true,
+      "scenarios": [
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "passed": true
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "passed": true
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "passed": true
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "passed": true
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "passed": true
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "passed": true
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "passed": true
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "passed": true
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "passed": true
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "passed": true
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "passed": true
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "passed": true
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "passed": true
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "passed": true
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "passed": true
+        }
+      ],
+      "accessibility": [
+        {
+          "scenario": "open keyboard comment composer",
+          "violations": []
+        },
+        {
+          "scenario": "keyboard selection, intent and narrow/zoomed layout",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved document editor",
+          "violations": []
+        },
+        {
+          "scenario": "document recovery comparison dialog",
+          "violations": []
+        },
+        {
+          "scenario": "source-save confirmation dialog",
+          "violations": []
+        },
+        {
+          "scenario": "document draft exit, reload, access and matching-save cleanup",
+          "violations": []
+        },
+        {
+          "scenario": "reverting an edit does not restore an obsolete draft",
+          "violations": []
+        },
+        {
+          "scenario": "unsaved-input source-switch dialog",
+          "violations": []
+        },
+        {
+          "scenario": "unposted comments and replies remain with their source",
+          "violations": []
+        },
+        {
+          "scenario": "suggestions preserve unapplied drafts and provenance",
+          "violations": []
+        },
+        {
+          "scenario": "attachment feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO attachment: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "discussion feedback recovery dialog",
+          "violations": []
+        },
+        {
+          "scenario": "ADO discussion: failed save, two-copy recovery, explicit save and read failure",
+          "violations": []
+        },
+        {
+          "scenario": "insights displayed findings keyboard surface",
+          "violations": []
+        },
+        {
+          "scenario": "insights actual outcomes desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights opt-in, final cohorts, reruns and first outcomes",
+          "violations": []
+        },
+        {
+          "scenario": "insights exclude policy-hidden, capped and unanchorable findings",
+          "violations": []
+        },
+        {
+          "scenario": "insights failed posting stays pending and retry records once",
+          "violations": []
+        },
+        {
+          "scenario": "insights clear, off, no retroactivity and delayed completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights source switch, teardown, reload and stale source completion",
+          "violations": []
+        },
+        {
+          "scenario": "insights draft boundary and superseded runs reject late results",
+          "violations": []
+        },
+        {
+          "scenario": "insights sign-out and replacement account clear capture",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for signed-out",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for read-only",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for sample",
+          "violations": []
+        },
+        {
+          "scenario": "insights disabled for unavailable",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy and export retry desktop",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 390",
+          "violations": []
+        },
+        {
+          "scenario": "insights narrow 320",
+          "violations": []
+        },
+        {
+          "scenario": "insights privacy, inspection, export failure, retry and keyboard layout",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity paused",
+          "violations": []
+        },
+        {
+          "scenario": "insights capacity refuses whole run, preserves prior data and resets",
+          "violations": []
+        }
+      ],
+      "blockedRequests": [],
+      "error": null
+    }
+  ]
+}

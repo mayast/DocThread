@@ -1,0 +1,57 @@
+name: Deploy to Azure Static Web Apps
+
+on:
+  # Auto-deploy every merge to main so the live site never silently lags behind
+  # the deployed branch. Previously this workflow was manual-only
+  # (workflow_dispatch), so merges to main did not reach the hosted SWA until
+  # someone remembered to dispatch a deploy — leaving the live site stale.
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# A newer push to main supersedes an in-flight deploy so we don't race two
+# uploads to the same Static Web App.
+concurrency:
+  group: deploy-swa-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        env:
+          VITE_BASE: /
+          VITE_GH_CLIENT_ID: ${{ vars.VITE_GH_CLIENT_ID }}
+          VITE_OAUTH_PROXY: /api
+          VITE_AZURE_CLIENT_ID: 3a9dd418-f26a-4e43-b3bb-30a5c89b251a
+          VITE_AZURE_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+          VITE_GRAPH_TRANSPORT: msal
+          VITE_ADO_TRANSPORT: off
+        run: npm run build
+
+      - name: Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: upload
+          app_location: dist
+          api_location: api
+          output_location: ''
+          skip_app_build: true

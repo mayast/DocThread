@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DocThread | Current and proposed review layout</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #1f2328;
+      background: #f6f8fa;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --line: #d0d7de;
+      --blue: #0969da;
+      --blue-soft: #ddf4ff;
+      --green: #1f883d;
+      --red: #cf222e;
+      --amber: #633c01;
+    }
+    * { box-sizing: border-box; letter-spacing: 0; }
+    body { margin: 0; }
+    button, input, textarea, select { font: inherit; }
+    button, summary, select { cursor: pointer; }
+    button, input, textarea, select { border: 1px solid var(--line); border-radius: 6px; background: white; color: inherit; }
+    button { min-height: 32px; padding: 5px 10px; font-weight: 600; background: #f6f8fa; }
+    button:hover:not(:disabled) { background: #f3f4f6; border-color: #b6bec6; }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    button.primary { color: white; background: var(--green); border-color: #1f232826; }
+    button.primary:hover:not(:disabled) { background: #1a7f37; }
+    button.quiet { background: transparent; border-color: transparent; }
+    button.danger { color: var(--red); }
+    button.icon { width: 32px; flex: 0 0 32px; padding: 3px; font-size: 20px; }
+    input, textarea, select { padding: 7px 9px; min-width: 0; max-width: 100%; }
+    textarea { width: 100%; resize: vertical; line-height: 1.5; min-height: 76px; }
+    :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+    a { color: var(--blue); text-underline-offset: 3px; }
+    h1, h2, h3, h4, p { margin: 0; }
+    code { font-family: Consolas, monospace; font-size: 12px; overflow-wrap: anywhere; }
+    [hidden] { display: none !important; }
+    .study-head { background: white; border-bottom: 1px solid var(--line); padding: 20px 28px 16px; }
+    .study-title { display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+    .study-title h1 { font-size: 23px; font-weight: 650; }
+    .study-title span { color: var(--muted); font-size: 14px; }
+    .study-head > p { color: var(--muted); margin-top: 7px; max-width: 1100px; line-height: 1.5; }
+    .study-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; padding-top: 16px; }
+    .segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; padding: 3px; background: #f6f8fa; }
+    .segmented button { border: 0; background: transparent; font-size: 13px; min-width: 82px; }
+    .segmented button[aria-pressed="true"] { background: #eaeef2; box-shadow: none; color: var(--ink); }
+    .field-inline { display: flex; align-items: center; gap: 9px; font-size: 13px; }
+    .field-inline select { width: 264px; }
+    .study-controls > a { margin-left: auto; font-size: 13px; }
+    .scenario-context { padding: 12px 28px; line-height: 1.5; background: #f9fbfc; border-bottom: 1px solid var(--line); }
+    .scenario-context strong { margin-right: 8px; }
+    .scenario-context span { color: var(--muted); }
+    .comparison { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; padding: 20px 28px; }
+    .comparison[data-view="current"], .comparison[data-view="proposed"] { grid-template-columns: minmax(0, 1fr); }
+    .comparison[data-view="current"] .proposed-study, .comparison[data-view="proposed"] .current-study { display: none; }
+    .study { min-width: 0; }
+    .panel-heading { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+    .panel-heading h2 { font-size: 16px; }
+    .panel-heading span { color: var(--muted); font-size: 12px; }
+    .panel-heading .proposed-label { color: var(--ink); }
+    .surface { container-type: inline-size; border: 1px solid #cbd3da; border-radius: 8px; overflow: clip; background: white; }
+    .app-shell { height: 780px; display: flex; flex-direction: column; position: relative; }
+    .proposed-study .app-shell { height: auto; min-height: 780px; }
+    .proposed-study .app-body { flex: 0 0 auto; }
+    .proposed-study .document { max-height: none; overflow: visible; }
+    .proposed-study .thread-list { flex: 0 0 auto; max-height: none; overflow: visible; }
+    .app-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 13px 15px; border-bottom: 1px solid #3d444d; background: #25292e; color: white; }
+    .wordmark { font-size: 16px; font-weight: 700; flex: 0 0 auto; }
+    .source-identity { min-width: 0; flex: 1; font-size: 12px; line-height: 1.5; }
+    .source-identity strong { display: block; overflow-wrap: anywhere; font-size: 13px; }
+    .source-identity span { color: #b1bac4; overflow-wrap: anywhere; }
+    .header-commands { display: flex; align-items: center; gap: 5px; }
+    .header-utilities { display: flex; align-items: center; gap: 5px; margin-left: 4px; padding-left: 9px; border-left: 1px solid #57606a; }
+    .header-commands > button:hover:not(:disabled), .header-utilities > button:hover:not(:disabled) { background: #373e47; border-color: #57606a; }
+    .avatar { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: white; background: #373e47; font-weight: 600; font-size: 11px; }
+    .menu-anchor { position: relative; }
+    .menu-anchor > summary { list-style: none; padding: 6px 8px; border-radius: 5px; min-height: 32px; font-weight: 600; }
+    .menu-anchor > summary::-webkit-details-marker { display: none; }
+    .menu-anchor[open] > summary { background: #eaeef2; color: var(--ink); }
+    .app-header .menu-anchor[open] > summary { background: #373e47; color: white; }
+    .menu { position: absolute; z-index: 12; top: 40px; right: 0; width: 230px; padding: 7px; background: white; color: var(--ink); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 8px 24px #8c959f33; }
+    .menu button { display: block; width: 100%; text-align: left; border: 0; font-weight: 500; padding: 9px; }
+    .menu h4 { font-size: 11px; color: var(--muted); padding: 6px 9px; font-weight: 600; }
+    .menu hr { border: 0; border-top: 1px solid var(--line); margin: 5px 0; }
+    .status-strip { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; padding: 8px 15px; font-size: 12px; line-height: 1.5; border-bottom: 1px solid var(--line); background: #fafbfc; }
+    .status-strip .status-item { display: inline-flex; gap: 6px; align-items: baseline; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; background: #687984; flex: 0 0 7px; align-self: center; }
+    .dot.good { background: var(--green); }
+    .dot.pending { background: #b58012; }
+    .dot.error { background: var(--red); }
+    .state-notice { padding: 11px 15px; background: #fff8c5; border-bottom: 1px solid #d4a72c66; line-height: 1.5; font-size: 12px; }
+    .state-notice.error { background: #ffebe9; border-color: #ff818266; }
+    .state-notice.info { background: var(--blue-soft); border-color: #54aeff66; }
+    .state-notice strong { display: block; font-size: 13px; }
+    .state-notice .row { margin-top: 7px; }
+    .row { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+    .row.between { justify-content: space-between; }
+    .app-body { display: grid; grid-template-columns: minmax(0, 1fr) 308px; flex: 1; min-height: 0; }
+    .document { padding: 28px 25px; min-width: 0; overflow: auto; background: white; }
+    .document .eyebrow { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+    .document h2 { font-size: 25px; line-height: 1.2; font-weight: 650; margin-bottom: 12px; }
+    .document .deck { font-size: 14px; color: var(--muted); margin: 16px 0 22px; }
+    .document h3 { font-size: 16px; margin: 24px 0 10px; padding-bottom: 7px; border-bottom: 1px solid #e2e6ea; }
+    .document p, .document li { font-size: 14px; line-height: 1.75; }
+    .document p + p { margin-top: 12px; }
+    .document ul { padding-left: 20px; }
+    mark.passage { background: #fff8c5; border-radius: 2px; color: inherit; cursor: pointer; }
+    mark.passage.active { background: #f7c843; }
+    .doc-meta { display: flex; gap: 10px; color: var(--muted); font-size: 11px; margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .comments-rail { border-left: 1px solid var(--line); background: #f6f8fa; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+    .rail-head { padding: 14px 14px 11px; border-bottom: 1px solid var(--line); }
+    .rail-head h3 { font-size: 15px; font-weight: 650; }
+    .summary-counts { color: var(--muted); font-size: 12px; margin-top: 5px; }
+    .summary-counts .blockers { color: var(--red); }
+    .filters { margin-top: 11px; font-size: 12px; }
+    .filter-fields { display: grid; gap: 7px; }
+    .filter-fields label { display: grid; gap: 4px; color: var(--muted); font-size: 11px; }
+    .filter-fields .two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .filter-fields input, .filter-fields select { width: 100%; font-size: 12px; }
+    .thread-list { flex: 1; min-height: 90px; overflow-y: auto; padding: 12px; }
+    .thread-card { padding: 13px; border: 1px solid var(--line); border-radius: 6px; background: white; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+    .thread-card.active { border-color: var(--blue); box-shadow: none; }
+    .thread-card blockquote { margin: 0 0 9px; color: var(--muted); font-size: 12px; }
+    .tag { display: inline-flex; align-items: center; padding: 1px 6px; border: 1px solid var(--line); border-radius: 2em; font-size: 10px; font-weight: 600; color: var(--muted); background: white; }
+    .tag.blocking { color: var(--red); background: #ffebe9; border-color: #ff818266; }
+    .tag.suggestion { color: #8250df; background: #fbefff; border-color: #c297ff66; }
+    .byline { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; color: var(--muted); margin: 9px 0 5px; }
+    .byline strong { color: #353c42; font-weight: 600; }
+    .thread-actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 11px; align-items: center; }
+    .thread-actions button { min-height: 29px; font-size: 12px; padding: 3px 7px; }
+    .thread-actions > .quiet { color: var(--blue); }
+    .thread-actions.secondary { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+    .thread-actions.secondary > .quiet { color: var(--muted); }
+    .receipt { margin-top: 10px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .receipt.warning { color: var(--amber); }
+    .receipt.failed { color: var(--red); }
+    .reply-area { margin-top: 10px; }
+    .reply-area textarea { min-height: 58px; font-size: 12px; }
+    .inline-hint { display: flex; align-items: flex-start; gap: 6px; background: #f6f8fa; color: var(--muted); padding: 8px 10px; font-size: 12px; line-height: 1.5; }
+    .inline-hint p { flex: 1; }
+    .inline-hint .icon { min-height: 24px; width: 24px; flex-basis: 24px; font-size: 16px; padding: 0; }
+    .composer { border-top: 1px solid var(--line); background: white; padding: 12px 14px; }
+    .composer > label { display: block; font-weight: 600; font-size: 12px; margin-bottom: 6px; }
+    .selected-quote { display: block; font-size: 11px; line-height: 1.5; margin-bottom: 9px; color: var(--muted); }
+    .composer textarea { font-size: 12px; min-height: 66px; }
+    .comment-types { min-width: 0; margin: 9px 0; padding: 0; border: 0; }
+    .intent-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 6px; background: #f6f8fa; }
+    .intent-choice { position: relative; min-width: 0; cursor: pointer; }
+    .visually-hidden, .intent-choice input { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .intent-choice span { display: grid; place-items: center; min-height: 30px; padding: 4px 3px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; line-height: 18px; color: var(--muted); }
+    .intent-choice:hover span { background: #eaeef2; }
+    .intent-choice input:checked + span { background: #eaeef2; border-color: #8c959f; color: var(--ink); font-weight: 600; }
+    .intent-choice input:focus-visible + span { outline: 2px solid var(--blue); outline-offset: 1px; }
+    .suggest-edit { display: flex; align-items: center; gap: 6px; font-size: 12px; margin: 0 0 11px; cursor: pointer; }
+    .suggest-edit input { margin: 0; accent-color: var(--blue); }
+    .composer .footnote { font-size: 11px; color: var(--muted); max-width: 170px; line-height: 1.4; }
+    .composer .replacement { margin-top: 7px; }
+    .local-badge { color: var(--amber); background: #fff8c5; font-size: 10px; padding: 2px 5px; border-radius: 3px; }
+    .comparison-caption { margin-top: 10px; color: var(--muted); line-height: 1.5; font-size: 12px; }
+    body.no-annotations .comparison-caption { display: none; }
+    .legacy .app-header { background: #25292e; color: white; gap: 8px; padding: 12px; }
+    .legacy .source-identity span { color: #b1bac4; }
+    .legacy .source-identity { flex-basis: 150px; }
+    .legacy .legacy-url { background: #0d1117; color: #dce2e8; border-color: #57606a; font-size: 11px; flex: 1; }
+    .legacy .app-header button { background: #373e47; border-color: #57606a; color: white; min-height: 29px; font-size: 12px; }
+    .legacy .app-header .primary { background: #1f883d; }
+    .legacy .app-body { grid-template-columns: 40px minmax(0, 1fr) 285px; }
+    .legacy-recents { background: #f6f8fa; border-right: 1px solid var(--line); padding: 12px 7px; font-size: 11px; writing-mode: vertical-rl; color: var(--muted); }
+    .legacy .document { padding: 25px 20px; position: relative; }
+    .legacy .document .deck { padding-left: 12px; border-left: 2px solid #cad4dc; }
+    .legacy mark.passage { background: #fff1b5; border-bottom: 2px solid #d7a919; }
+    .legacy mark.passage.active { background: #ffe895; }
+    .legacy .thread-card blockquote { padding-left: 9px; border-left: 2px solid #d3b356; }
+    .legacy .rail-head { padding: 12px; }
+    .legacy .always-visible { margin-top: 10px; gap: 5px; }
+    .legacy .always-visible button { font-size: 11px; min-height: 28px; padding: 4px 6px; }
+    .legacy .grounding { margin-top: 10px; color: var(--muted); font-size: 11px; }
+    .legacy .filter-chips { display: flex; gap: 4px; flex-wrap: wrap; margin: 12px 0 7px; }
+    .legacy .filter-chips span { border: 1px solid #d0d7de; border-radius: 5px; padding: 3px 5px; font-size: 10px; background: white; }
+    .legacy .filter-chips span:first-child { background: #ddf4ff; color: #0550ae; }
+    .legacy-search { display: grid; grid-template-columns: minmax(0, 1fr) 70px; gap: 5px; }
+    .legacy-search input, .legacy-search select { font-size: 11px; width: 100%; padding: 6px; }
+    .legacy .floating-composer { position: absolute; left: 10px; right: 10px; top: 242px; padding: 12px; background: white; border: 1px solid #d0d7de; border-radius: 6px; box-shadow: 0 8px 24px #38465830; z-index: 2; }
+    .legacy .floating-composer textarea { margin: 8px 0; font-size: 12px; }
+    .legacy .floating-composer button { font-size: 11px; }
+    .legacy .floating-composer .primary, .legacy .thread-actions .primary { background: #1f883d; border-color: #1f883d; }
+    .legacy .floating-composer .row { gap: 4px; }
+    .legacy .thread-card textarea { min-height: 48px; margin-top: 9px; font-size: 12px; }
+    .access-empty { padding: 30px 22px; }
+    .access-empty h2 { font-size: 21px; margin-bottom: 12px; }
+    .access-empty p { color: #56626d; line-height: 1.6; font-size: 13px; margin-bottom: 14px; }
+    .access-empty .source-box { padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 16px 0; }
+    .access-empty .source-box strong { display: block; font-size: 13px; }
+    .editor-toolbar { padding: 9px 15px; border-bottom: 1px solid var(--line); }
+    .editor-toolbar .row { gap: 6px; }
+    .editor-toolbar .segmented { margin-right: auto; }
+    .editor-toolbar .segmented button { min-width: 0; }
+    .editor-surface { padding: 16px; min-width: 0; overflow-y: auto; }
+    .editor-surface textarea { min-height: 370px; height: 100%; font-family: Consolas, monospace; font-size: 13px; line-height: 1.8; border: 0; }
+    .editor-surface.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+    .editor-surface .document { padding: 16px; border-left: 1px solid var(--line); }
+    .draft-preview { white-space: pre-wrap; overflow-wrap: anywhere; }
+    .diff { font-family: Consolas, monospace; font-size: 12px; line-height: 1.5; margin: 10px 0; }
+    .diff del { display: block; background: #fcecec; color: #963b39; text-decoration: none; padding: 7px; }
+    .diff ins { display: block; background: #eaf5ee; color: #205b3d; text-decoration: none; padding: 7px; }
+    .notes { margin: 0 28px 28px; border-top: 1px solid #cbd3da; padding-top: 16px; }
+    .notes > summary { font-weight: 600; font-size: 15px; }
+    .notes p { margin: 12px 0; color: var(--muted); line-height: 1.6; max-width: 1050px; }
+    .notes table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 16px; background: white; }
+    .notes td, .notes th { text-align: left; vertical-align: top; padding: 12px; border: 1px solid var(--line); line-height: 1.5; }
+    .notes th { background: #eef2f5; font-weight: 600; }
+    .notes td:first-child { width: 19%; font-weight: 600; }
+    .evidence-assets { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 18px; }
+    .evidence-assets a { width: 210px; font-size: 12px; }
+    .evidence-assets img { display: block; width: 210px; height: 134px; object-fit: contain; object-position: top; background: white; border: 1px solid var(--line); margin-bottom: 6px; }
+    .handoff { padding: 16px 28px 24px; background: white; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); line-height: 1.6; }
+    dialog { padding: 0; border: 1px solid #bfcbd5; border-radius: 8px; max-width: min(540px, calc(100% - 24px)); width: 540px; color: var(--ink); background: white; box-shadow: 0 18px 65px #172d4438; }
+    dialog::backdrop { background: #14283d50; }
+    .dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 22px 12px; }
+    .dialog-head h2 { font-size: 20px; line-height: 1.3; }
+    .dialog-body { padding: 0 22px 18px; }
+    .dialog-body p { margin: 8px 0 14px; font-size: 13px; line-height: 1.6; }
+    .dialog-body label { display: block; font-size: 12px; margin: 12px 0 6px; font-weight: 600; }
+    .dialog-body input { width: 100%; }
+    .dialog-body .source-bound { color: var(--muted); font-size: 12px; }
+    .dialog-body .copy-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; }
+    .dialog-actions { padding: 14px 22px 20px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
+    .dialog-note { background: var(--blue-soft); color: #0550ae; padding: 8px 11px; border-radius: 4px; }
+    .dialog-error { color: var(--red); }
+    .mock-action { min-height: 22px; font-size: 12px; padding: 0 28px 10px; color: #365f7e; }
+    @container (min-width: 1000px) {
+      .app-body { grid-template-columns: minmax(0, 1fr) 355px; }
+      .legacy .app-body { grid-template-columns: 155px minmax(0, 1fr) 355px; }
+      .legacy-recents { writing-mode: horizontal-tb; padding: 20px 14px; }
+      .document { padding: 38px 48px; }
+      .legacy .floating-composer { left: 25%; right: auto; width: 330px; }
+    }
+    @container (max-width: 620px) {
+      .app-shell { height: auto; min-height: 700px; }
+      .app-body, .legacy .app-body { display: flex; flex-direction: column; }
+      .document { max-height: 360px; min-height: 260px; padding: 22px 18px; }
+      .document h2 { font-size: 23px; }
+      .comments-rail { border-left: 0; border-top: 1px solid var(--line); }
+      .thread-list { max-height: 300px; }
+      .legacy-recents { writing-mode: horizontal-tb; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+      .legacy .document { min-height: 390px; }
+      .source-identity { flex-basis: calc(100% - 120px); }
+      .header-commands { margin-left: auto; }
+      .legacy .legacy-url { flex-basis: 100%; }
+      .legacy .floating-composer { top: 166px; }
+      .editor-surface.split { display: block; }
+      .editor-surface.split .document { display: none; }
+    }
+    @media (max-width: 1150px) {
+      .comparison { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .study-head { padding: 16px; }
+      .study-title h1 { font-size: 21px; }
+      .study-title { gap: 5px; }
+      .study-controls { gap: 12px; }
+      .study-controls .field-inline { flex-wrap: wrap; }
+      .field-inline select { width: 100%; }
+      .study-controls > a { margin-left: 0; }
+      .scenario-context { padding: 12px 16px; font-size: 12px; }
+      .comparison { padding: 16px 12px; gap: 22px; }
+      .panel-heading { align-items: flex-start; }
+      .panel-heading span { max-width: 155px; text-align: right; }
+      .notes { margin: 0 16px 22px; }
+      .notes table, .notes tbody, .notes tr, .notes td { display: block; }
+      .notes thead { display: none; }
+      .notes td:first-child { width: auto; background: #eef2f5; }
+      .notes td + td { border-top: 0; }
+      .notes tr { margin-bottom: 12px; }
+      .notes td::before { display: block; font-size: 11px; color: var(--muted); font-weight: 600; content: attr(data-label); margin-bottom: 4px; }
+      .dialog-head { padding: 18px 16px 10px; }
+      .dialog-body { padding: 0 16px 16px; }
+      .dialog-actions { padding: 14px 16px; }
+      .handoff { padding: 16px; }
+      .mock-action { padding-inline: 16px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .study { animation: reveal .25s ease-out; }
+      @keyframes reveal { from { opacity: .3; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    }
+  </style>
+</head>
+<body>
+  <header class="study-head">
+    <div class="study-title"><h1>DocThread</h1><span>Review-first design checkpoint / 09 September 2026</span></div>
+    <p>Current layout versus the proposed layout, using the same illustrative document. All actions and outcomes are simulated. No sign-in, source writes, or notifications.</p>
+    <div class="study-controls">
+      <div class="segmented" role="group" aria-label="Comparison view">
+        <button data-view="compare" aria-pressed="true">Compare</button>
+        <button data-view="current" aria-pressed="false">Current</button>
+        <button data-view="proposed" aria-pressed="false">Proposed</button>
+      </div>
+      <label class="field-inline" for="scenario">Scenario
+        <select id="scenario">
+          <option value="review">1. Read and comment</option>
+          <option value="local">2. Signed out / local feedback</option>
+          <option value="access">3. Private link / no access</option>
+          <option value="saving">4. Feedback save in progress</option>
+          <option value="saved">5. Shared save confirmed</option>
+          <option value="failed">6. Failed / conflicting save</option>
+          <option value="switch">7. Unsaved input / source switch</option>
+          <option value="anchor">8. Uncertain / missing anchor</option>
+          <option value="editor">9. Author tools / unsaved edit</option>
+          <option value="notify">10. Notification uncertainty</option>
+          <option value="ado">11. ADO local / shared mismatch</option>
+          <option value="applied">12. Suggestion applied to draft</option>
+        </select>
+      </label>
+      <label class="field-inline"><input id="annotations" type="checkbox" checked> Design annotations</label>
+      <label class="field-inline"><input id="simulate-copy-failure" type="checkbox"> Simulate copy failure</label>
+      <a href="prototype.html">Maya's original prototype &#8599;</a>
+    </div>
+  </header>
+  <div class="scenario-context" aria-live="polite"><strong id="scenario-title"></strong><span id="scenario-description"></span></div>
+  <main class="comparison" data-view="compare">
+    <section class="study current-study" aria-labelledby="current-title">
+      <div class="panel-heading"><h2 id="current-title">Current</h2><span>Reconstructed from code at 6bd519f7</span></div>
+      <div class="surface"><div id="current-app" class="app-shell legacy"></div></div>
+      <p class="comparison-caption">Existing labels and control placement, not a live screenshot. Editor and AI actions are always visible; feedback shares one global status message. The selection composer floats over the document.</p>
+    </section>
+    <section class="study proposed-study" aria-labelledby="proposed-title">
+      <div class="panel-heading"><h2 id="proposed-title" class="proposed-label">Proposed</h2><span>Same review model, clearer boundaries</span></div>
+      <div class="surface"><div id="proposed-app" class="app-shell"></div></div>
+      <p class="comparison-caption" id="proposed-caption"></p>
+    </section>
+  </main>
+  <div class="mock-action" id="mock-action" role="status"></div>
+  <details class="notes" open>
+    <summary>Design additions and approval boundaries</summary>
+    <p>The normal path stays small. Extra controls appear only when there is input or an outcome to protect. These additions mitigate the identified gaps; a mockup cannot make durability, source affinity, or delivery guarantees true.</p>
+    <table>
+      <thead><tr><th>Gap</th><th>Folded into this design</th><th>Engineering boundary</th></tr></thead>
+      <tbody>
+        <tr><td>Unsaved comments and document edits</td><td data-label="Design">Name the original source on the draft and on the leave guard. Stay, inspect/export, or explicitly discard. Reply drafts survive filtering. Applied edits say "in this tab" until source save is confirmed.</td><td data-label="Boundary">Transient input guards fit #128. Durable Markdown draft storage and reload recovery need a separate proposal. AC4 stays open until recovery is verified.</td></tr>
+        <tr><td>ADO stored review wins over failed-save feedback</td><td data-label="Design">Pause replacement of local feedback; show the work-item identity, local copy, shared snapshot, and export. No automatic merge or "recovered" success.</td><td data-label="Boundary">Requires reliable local/shared comparison and reconciliation. The two-copy panel is a proposed blocked recovery state, not a shipped capability or schema change.</td></tr>
+        <tr><td>Async work follows a mutable current source</td><td data-label="Design">Bind visible operation results to the original source; hold source switching during active save/notification work. Permit inspection/copying of the current input.</td><td data-label="Boundary">The UI guard is a mitigation, not a race fix. Captured operation identity and late-completion tests need separately approved reliability work.</td></tr>
+        <tr><td>Posted / applied / saved / notified are conflated</td><td data-label="Design">Separate comment receipt, draft application, source receipt, and notification result. Webhook acceptance says delivery is unconfirmed. A local-only comment can still have a mention-email outcome.</td><td data-label="Boundary">No delivery receipt exists today. Preserve existing dispatch rules, allowlists and retries; changing sequencing or guaranteeing mailbox delivery is separate scope.</td></tr>
+        <tr><td>Lost passage context and silent copy failure</td><td data-label="Design">Put the composer in the rail with its selected quote. Keep uncertainty warnings with threads. Copy failure exposes a selectable link; dialogs restore focus.</td><td data-label="Boundary">Presentation and interaction work within #128. Do not add an anchor-confirmation state, silently move a thread, or equate Resolve with approval.</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Preserved:</strong> rendered document, selection anchors, question/suggestion/blocking data, contextual Reply/Resolve and suggestions, source-write confirmation, editor, unified AI review, summary, optional grounding, recents, sample, sharing and inbox. No mandatory role, intent selection or setup.</p>
+    <p><strong>Visual and intent decision:</strong> keep the existing GitHub Primer direction: GitHub typography, neutral surfaces, green primary actions and complete outlines, with no Fluent styling or decorative accent stripes. Question, Suggestion and Blocking stay visible together and selectable in one click. Question remains the default; choosing a category is not a prerequisite to posting. The optional "Suggest an edit" control adds an exact replacement independently of the Suggestion category.</p>
+    <p><strong>Implementation constraint:</strong> #128 is a UX improvement, not a presentation redesign. Reuse the application's existing Primer-consistent styles, components, typography, colors and button treatments. Change control placement, grouping, wording or interaction only to address the ACs; do not translate this mockup into a replacement theme. Separate frequent review actions from metadata and utilities using existing neutral separators and spacing, not accent stripes, extra menus or instructional labels. Completion depends on AC evidence and the stated validation gates, not visual novelty.</p>
+    <p><strong>Thread visibility:</strong> show complete comments and thread actions without truncation or a fixed-height nested scroller. The rail grows with its content; the new-comment composer appears only after selecting a passage. Short discussions should fit the available desktop space. Longer discussions and narrow screens use page scrolling, retaining the original quote and passage navigation.</p>
+    <p><strong>Wording decision:</strong> category and thread-state labels carry no product-authored definitions, prescriptions or approval disclaimers. Reviewers decide how to use Question, Suggestion, Blocking and Resolve. Guidance is limited to finding controls, understanding actual access and save outcomes, or recovering input. This replaces the earlier proposal to explain Blocking.</p>
+    <p><strong>Direct controls:</strong> search, filter and sort are visible in the comments rail. Thread actions have no overflow menu. Copy link attempts the copy directly and opens a selectable fallback only on failure. Tools stays a single flat menu for secondary document and AI actions; optional AI grounding is disclosed within the AI panel.</p>
+    <p><strong>Changes from Maya's static mockup:</strong> one global Edit/AI entry point under Tools; Filters no longer contains AI; the coach becomes an inline session hint. The older standalone readiness button is not reintroduced. The prototype's rail composer is retained.</p>
+    <div class="evidence-assets">
+      <a href="proposed-default.png"><img src="proposed-default.png" alt="Maya's proposed rendered-document and comments-rail screenshot" width="210" height="134">Maya: proposed layout</a>
+      <a href="tools-menu.png"><img src="tools-menu.png" alt="Maya's Tools menu screenshot" width="210" height="134">Maya: Tools menu</a>
+      <a href="today-current.png"><img src="today-current.png" alt="Historical current-UI screenshot supplied with Maya's prototype" width="210" height="134">Historical screenshot, not today's baseline</a>
+    </div>
+  </details>
+  <footer class="handoff">
+    <strong>Checkpoint, not implementation approval.</strong> Robin reviews the layout and added safeguards; then agree the bounded #128 implementation and separately scoped reliability work. Application code is unchanged. AC1-AC8, provider regression coverage, an uncoached reviewer trial, and post-deployment live verification remain gates. #33 is not bundled. No push, PR, deployment, or issue closure is authorized by this artifact.
+    <br><a href="https://github.com/gim-home/DocThread/issues/128">Authoritative issue scope</a> &middot; <a href="https://github.com/gim-home/DocThread/issues/128#issuecomment-5599272468">Coordination constraints</a>
+  </footer>
+  <dialog id="mock-dialog" aria-labelledby="dialog-title"></dialog>
+  <script>
+    const sourceName = 'docs/launch-plan.md';
+    const repositoryName = 'example/handbook';
+    const selectedSentence = 'The launch checklist must be complete before the release is announced.';
+    const draftInitial = '# Launch readiness\n\n## Review window\n\n' + selectedSentence + '\n\nThe owner records any outstanding exceptions before publication.\n';
+    const scenarios = {
+      review: { title: 'Read and comment', description: 'Read the document and complete threads. Select a passage to open the comment composer.', status: 'Feedback loaded from source', current: '', caption: 'Complete threads, with no nested thread scroller. Selecting a passage opens the composer with Question, Suggestion and Blocking directly available. Existing Primer styling is retained; utilities are separated from frequent actions.' },
+      local: { title: 'Signed out / local feedback', description: 'Local feedback is not shared feedback. Signing in is separate from granting source permission.', status: 'Feedback in this browser only', current: '', caption: 'The source and feedback visibility stay visible, even on mobile. No automatic publication or anonymous shared writes.' },
+      access: { title: 'Private link without access', description: 'The requested source did not load. A share link is not a permission grant.', status: 'Requested document not loaded', current: 'GitHub source error: GitHub source resolution failed (403).', caption: 'The attempted source is explicit. A previous document or sample is never presented as if the requested private file loaded.' },
+      saving: { title: 'Feedback save in progress', description: 'Illustrative pending operation. No confirmed shared-save receipt exists yet.', status: 'Saving feedback for launch-plan.md', current: '', caption: 'Switching sources is temporarily held while work is active. This mitigates the UI path only; operation identity still needs a reliability fix.' },
+      saved: { title: 'Shared save confirmed', description: 'Fixture: the provider returned a successful review-save receipt for this source. No notification outcome is implied.', status: 'Feedback saved to GitHub', current: 'Comments saved to GitHub.', caption: 'A shared-save receipt belongs to feedback and this source. It says nothing about document edits or notification delivery.' },
+      failed: { title: 'Failed / conflicting save', description: 'Fixture: bounded conflict retries were exhausted. Local feedback remains unsent; source-write recovery is not an automatic overwrite.', status: 'Feedback save failed', current: 'Auto-save failed (use "Save review"): update is not a fast forward.', caption: 'Failure remains visible with retry and copy/export recovery. No "all saved" label; no expanded CAS retries or forced writes.' },
+      switch: { title: 'Unsaved input / change source', description: 'An unsent comment and a document draft belong to launch-plan.md, not the next document.', status: 'Unsent input for launch-plan.md', current: '', caption: 'Open the source-change guard. Staying retains input; exporting provides a recovery copy. No unproven cross-reload draft retention is promised.' },
+      anchor: { title: 'Uncertain and missing anchors', description: 'The original quote remains visible when a location needs checking or cannot be found.', status: 'Feedback loaded from source', current: '1 comment could not be re-anchored after edits - shown as "text changed" in the panel.', caption: 'Keep confidence next to the original quote and thread. Existing anchoring behavior is unchanged; this is not a new re-anchoring workflow.' },
+      editor: { title: 'Returning author / unsaved edit', description: 'The existing editor is reached through Tools. Applying a draft is not saving the source.', status: 'Feedback loaded from source', current: '', caption: 'Editor controls are contextual. Exit with changed input opens a source-named guard. Save-to-source confirmation is retained.' },
+      notify: { title: 'Notification outcome is separate', description: 'Fixture: the email webhook accepted a request. Recipient delivery is not proven, and another notification outcome may be uncertain.', status: 'Feedback saved to GitHub', current: 'Comment saved. Emailed Alex.', caption: 'Say what was observed: notification service accepted the request; recipient delivery is unconfirmed. Never infer sharing or approval from it.' },
+      ado: { title: 'ADO local / shared mismatch', description: 'Proposed recovery state for a local comment missing from the stored work-item review. Detection/reconciliation requires separate reliability work.', status: 'Local feedback not in shared snapshot', current: 'Loaded #1042 from ADO work item (2 threads).', caption: 'Do not replace failed-save feedback without recovery. This panel is a design dependency, not proof that current ADO code preserves both versions.' },
+      applied: { title: 'Suggestion applied to draft', description: 'The text changed in this tab. No source-save receipt has been returned.', status: 'Feedback loaded from source', current: '', caption: 'The existing applied/resolved semantics remain, but "applied to draft" does not claim the source changed. Save and recovery actions remain available.' }
+    };
+    const mock = { scenario: 'review', compose: '', reply: '', quote: selectedSentence, composing: false, hintDismissed: false, intent: 'question', suggestion: false, replacement: selectedSentence, editorText: draftInitial, editorDirty: false, editing: false, editorView: 'editor', replyOpen: false, resolved: false, posted: false, postedBody: '', postedKind: 'new', postedQuote: selectedSentence, postedIntent: 'question', filter: 'open', search: '', sort: 'newest', dialogOpener: null, lastActionTrigger: null, draftExported: false, source: sourceName };
+    const comparison = document.querySelector('.comparison');
+    const proposedApp = document.getElementById('proposed-app');
+    const currentApp = document.getElementById('current-app');
+    const dialog = document.getElementById('mock-dialog');
+    const escapeText = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+    const isLocal = () => mock.scenario === 'local';
+    const operationActive = () => mock.scenario === 'saving';
+    const announce = text => { document.getElementById('mock-action').textContent = text; };
+    const sourceBinding = () => mock.scenario === 'ado' ? 'Example / Product / Work item #1042' : `${repositoryName} / ${mock.source} @ main`;
+
+    function documentMarkup(proposed) {
+      const passage = mock.scenario === 'applied' && proposed ? 'The launch checklist and any approved exceptions must be recorded before release.' : selectedSentence;
+      return `<article class="document" aria-label="${proposed ? 'Proposed' : 'Current'} document"><div class="eyebrow">PRODUCT / RELEASES</div><h2>Launch readiness</h2><p class="deck">A shared checklist for a clear, predictable release.</p><h3>Review window</h3><p>Reviewers have three working days to identify missing evidence and discuss any release risks.</p><p><mark class="passage active" ${proposed ? 'tabindex="0" role="button" data-action="select-passage" aria-label="Comment on the launch checklist passage"' : ''}>${escapeText(passage)}</mark></p><h3>Exceptions</h3><p>The owner records any outstanding exceptions before publication. Each exception includes its impact and a follow-up date.</p><ul><li>Confirm the release notes reflect the shipped behavior.</li><li>Check the rollback instructions with the on-call team.</li></ul><div class="doc-meta"><span>Updated 9 September</span><span>Source: main</span></div>${!proposed && mock.composing && mock.scenario !== 'access' ? legacyComposer() : ''}</article>`;
+    }
+
+    function legacyComposer() {
+      return `<div class="floating-composer"><div class="row"><button>Question</button><button>Suggestion</button><button>Blocking</button></div><button class="quiet">&#9998; Suggest an edit</button><textarea aria-label="Current comment" placeholder="Comment on the selected text... @mention to notify" readonly>${escapeText(mock.compose)}</textarea><div class="row"><button class="primary">Comment</button><button>Cancel</button></div></div>`;
+    }
+
+    function renderCurrent() {
+      const scenario = scenarios[mock.scenario];
+      currentApp.innerHTML = `<header class="app-header"><div class="source-identity"><div class="wordmark">DocThread</div><span>${mock.scenario === 'access' ? 'Sample / local' : `${repositoryName} / ${escapeText(sourceName)} @ main`}</span></div><input class="legacy-url" aria-label="Current source URL" value="https://github.com/example/handbook/blob/main/docs/launch-plan.md" readonly><div class="row"><button class="primary">Load</button><button>Save review</button><button>${mock.scenario === 'editor' ? 'Save doc' : 'Edit doc'}</button>${mock.scenario === 'editor' ? '<button>Discard</button>' : ''}<button>Sample</button><button title="Notifications" aria-label="Current notifications">&#128276;</button><button>${isLocal() ? 'Sign in with GitHub' : 'Sign out'}</button></div></header>${scenario.current ? `<div class="state-notice">${escapeText(scenario.current)}</div>` : ''}<div class="app-body"><aside class="legacy-recents">&#8249; Recently viewed</aside>${mock.scenario === 'access' ? '<article class="document"><div class="eyebrow">SAMPLE / LOCAL</div><h2>DocThread User Manual</h2><p>This is sample content. Highlight a sentence, leave a comment, reply, resolve, edit, and explore.</p><h3>Bring your own document</h3><p>Paste a GitHub file link into the bar at the top and click Load.</p></article>' : mock.scenario === 'editor' ? `<div class="editor-surface"><div class="row"><button>Editor</button><button>Split</button><button>Preview</button></div><textarea readonly aria-label="Current document editor">${escapeText(mock.editorText)}</textarea></div>` : documentMarkup(false)}<aside class="comments-rail"><div class="rail-head"><h3>Review status</h3><div class="row always-visible"><button>Summarize</button><button>Run AI Review</button><button>Share for review</button></div><div class="summary-counts">2 open &middot; 1 blocking &middot; 0 waiting on you</div><div class="grounding">&#9656; Ground review with REVIEW.md / skill</div><div class="filter-chips"><span>Open 2</span><span>Question 1</span><span>Suggestion 0</span><span>Blocking 1</span><span>Mine 0</span><span>Needs re-anchor ${mock.scenario === 'anchor' ? '1' : '0'}</span><span>All 2</span></div><div class="legacy-search"><input readonly aria-label="Current search" placeholder="Search comments, authors..."><select aria-label="Current sort"><option>Newest</option></select></div></div><div class="thread-list"><div class="thread-card"><blockquote>${escapeText(selectedSentence)}</blockquote><span class="tag blocking">Blocking</span>${mock.scenario === 'anchor' ? '<div class="receipt warning">text changed - check this is still the right place</div>' : ''}<div class="byline"><strong>Alex</strong><span>09:41</span></div><p>Do we need the rollback check before this is announced?</p>${mock.scenario === 'applied' ? '<div class="receipt">Suggested change applied</div>' : ''}<textarea aria-label="Current reply" placeholder="Reply..." readonly></textarea><div class="thread-actions"><button class="primary">Reply</button><button>Resolve</button><button>Delete</button><button>Copy link</button></div></div><div class="thread-card"><blockquote>three working days</blockquote><span class="tag">Question</span><div class="byline"><strong>Jordan</strong><span>09:12</span></div><p>Does this include the regional review?</p><textarea aria-label="Current second reply" placeholder="Reply..." readonly></textarea><div class="thread-actions"><button class="primary">Reply</button><button>Resolve</button><button>Delete</button><button>Copy link</button></div></div></div></aside></div>`;
+      currentApp.querySelectorAll('button').forEach(button => button.addEventListener('click', () => announce('Current is a static reconstruction of the inspected UI. Use Proposed to explore the draft interactions.')));
+    }
+
+    function sourceHeader() {
+      const ado = mock.scenario === 'ado';
+      const source = ado ? 'Work item #1042' : mock.source;
+      return `<header class="app-header">
+        <span class="wordmark">DocThread</span>
+        <div class="source-identity"><strong>${escapeText(source)}</strong><span>${ado ? 'Example / Product &middot; ADO (local development)' : `${repositoryName} &middot; main`}</span></div>
+        <div class="header-commands">
+          <button class="quiet" data-action="share">Share</button>
+          <div class="header-utilities" role="group" aria-label="Tools and account">
+            <details class="menu-anchor" id="tools-menu">
+              <summary aria-label="Tools" title="Document and AI tools">&#8943; Tools</summary>
+              <div class="menu">
+                <h4>Document</h4>
+                <button data-action="edit" ${isLocal() || mock.scenario === 'access' ? 'disabled title="Source access and sign-in are required"' : ''}>Edit document</button>
+                <button data-action="source" ${operationActive() ? 'disabled title="Finishing work for the current source"' : ''}>Open document</button>
+                <button data-action="export">Inspect / export unsaved input</button>
+                <hr><h4>Assistance</h4>
+                <button data-action="ai">AI Review</button>
+                <button data-action="summary">Summarize review</button>
+              </div>
+            </details>
+            <button class="icon quiet" data-action="inbox" title="Notifications" aria-label="Notifications">&#128276;</button>
+            ${isLocal() ? '<button class="quiet" data-action="signin">Sign in</button>' : '<button class="avatar quiet" data-action="account" title="Robin - GitHub account" aria-label="Account: Robin">RS</button>'}
+          </div>
+        </div>
+      </header>`;
+    }
+
+    function statusMarkup() {
+      const scenario = scenarios[mock.scenario];
+      const tone = mock.scenario === 'failed' ? 'error' : operationActive() ? 'pending' : ['saved', 'notify'].includes(mock.scenario) ? 'good' : '';
+      const sourceDraft = mock.editorDirty || ['switch', 'applied'].includes(mock.scenario);
+      return `<div class="status-strip" role="status"><span class="status-item"><i class="dot ${tone}" aria-hidden="true"></i>${escapeText(scenario.status)}</span>${sourceDraft ? '<span class="status-item"><i class="dot pending" aria-hidden="true"></i>Document edits in this tab only</span>' : ''}</div>`;
+    }
+
+    function noticeMarkup() {
+      if (isLocal()) return '<div class="state-notice"><strong>Feedback is not shared to the source</strong>Comments stay in this browser. Mention emails can have a separate outcome.<div class="row"><button data-action="signin">Sign in to publish</button></div></div>';
+      if (mock.scenario === 'failed') return `<div class="state-notice error"><strong>Could not save feedback to ${sourceName}</strong>The branch changed and retries were exhausted. Your feedback is still here; it is not confirmed shared.<div class="row"><button data-action="retry">Retry feedback save</button><button data-action="export">Inspect / export feedback</button></div></div>`;
+      if (operationActive()) return `<div class="state-notice info"><strong>Saving feedback for ${sourceName}</strong>Source switching is unavailable while the save is in progress.</div>`;
+      if (mock.scenario === 'switch') return `<div class="state-notice"><strong>Unsent input for ${sourceName}</strong>One comment and document edits are only in this tab.<div class="row"><button data-action="source">Open another document</button><button data-action="export">Inspect / export</button></div></div>`;
+      if (mock.scenario === 'ado') return '<div class="state-notice error"><strong>Local feedback is missing from the shared work-item review</strong>The copies differ. Local feedback has not been replaced.<div class="row"><button data-action="recovery">Inspect both copies</button><button data-action="export">Export local feedback</button></div></div>';
+      if (mock.scenario === 'applied') return '<div class="state-notice"><strong>Suggestion applied to draft</strong>Changes are in this tab. They have not been saved to the source.<div class="row"><button data-action="save-source">Save to source</button><button data-action="export">Export draft</button></div></div>';
+      return '';
+    }
+
+    function firstThread() {
+      return `<div class="thread-card${mock.posted && mock.postedKind === 'new' ? '' : ' active'}" data-thread="first" data-intent="blocking" data-resolved="${mock.resolved}">
+        <blockquote>${escapeText(selectedSentence)}</blockquote>
+        <div class="row"><span class="tag blocking">Blocking</span>${mock.resolved ? '<span class="tag">Resolved</span>' : ''}</div>
+        ${mock.scenario === 'anchor' ? '<div class="receipt warning"><strong>Location uncertain.</strong> Check the highlighted passage against this quote.</div>' : ''}
+        <div class="byline"><strong>Alex</strong><span>09:41</span></div>
+        <p>Do we need the rollback check before this is announced?</p>
+        ${mock.posted && mock.postedKind === 'reply' ? `<div class="byline"><strong>Robin</strong><span>Just now</span></div><p>${escapeText(mock.postedBody)}</p><p class="receipt">${isLocal() ? 'Reply in this browser only' : 'Reply posted; shared save not yet confirmed'}</p>` : ''}
+        ${mock.scenario === 'notify' ? '<p class="receipt warning">Email service accepted the request. Delivery unconfirmed.</p>' : ''}
+        ${mock.scenario === 'applied' ? '<div class="diff"><del>- Checklist complete before release.</del><ins>+ Checklist and exceptions recorded before release.</ins></div><p class="receipt warning">Applied to draft, not saved to source.</p>' : ''}
+        ${mock.replyOpen ? `<div class="reply-area"><textarea id="draft-reply" aria-label="Reply to Alex" placeholder="Reply to Alex...">${escapeText(mock.reply)}</textarea><div class="row"><button class="primary" data-action="post-reply">Post reply</button><button class="quiet" data-action="close-reply">Cancel</button></div></div>` : ''}
+        <div class="thread-actions" role="group" aria-label="Discussion actions">
+          <button class="quiet" data-action="reply">Reply</button>
+          <button data-action="resolve" ${isLocal() ? 'disabled title="Source write access required"' : ''}>${mock.resolved ? 'Reopen' : 'Resolve'}</button>
+        </div>
+        <div class="thread-actions secondary" role="group" aria-label="Thread utilities">
+          <button class="quiet" data-action="passage">Show passage</button>
+          <button class="quiet" data-action="copy-thread">Copy link</button>
+          <button class="quiet" data-action="ai-thread">AI: draft a fix</button>
+          <button class="quiet" data-action="delete-thread" ${isLocal() ? 'disabled title="Source write access required"' : ''}>Delete</button>
+        </div>
+        ${isLocal() ? '<p class="receipt">Source write access is required to change this shared thread.</p>' : ''}
+      </div>`;
+    }
+
+    function newThreadMarkup() {
+      if (!mock.posted || mock.postedKind !== 'new') return '';
+      return `<div class="thread-card active" data-thread="new" data-intent="${mock.postedIntent}" data-resolved="false"><blockquote>${escapeText(mock.postedQuote)}</blockquote><div class="row"><span class="tag ${mock.postedIntent}">${escapeText(mock.postedIntent[0].toUpperCase() + mock.postedIntent.slice(1))}</span>${isLocal() ? '<span class="local-badge">Local feedback</span>' : ''}</div><div class="byline"><strong>Robin</strong><span>Just now</span></div><p>${escapeText(mock.postedBody)}</p><p class="receipt">${isLocal() ? 'Posted in this browser only' : 'Posted; shared save not yet confirmed'}</p><div class="thread-actions"><button class="quiet" data-action="posted-thread">Open thread</button><button class="quiet" data-action="copy-thread">Copy link</button></div></div>`;
+    }
+
+    function composerMarkup() {
+      if (!mock.composing) return '';
+      const intents = [
+        { value: 'question', label: 'Question' },
+        { value: 'suggestion', label: 'Suggestion' },
+        { value: 'blocking', label: 'Blocking' },
+      ];
+      return `<section class="composer" aria-label="New comment">
+        <label for="draft-comment">Comment on selected text</label>
+        <span class="selected-quote">${escapeText(mock.quote)}</span>
+        <textarea id="draft-comment" placeholder="Add your comment...">${escapeText(mock.compose)}</textarea>
+        <fieldset class="comment-types">
+          <legend class="visually-hidden">Comment type</legend>
+          <div class="intent-choices">${intents.map(intent => `
+            <label class="intent-choice">
+              <input type="radio" name="draft-intent" value="${intent.value}" ${mock.intent === intent.value ? 'checked' : ''}>
+              <span>${intent.label}</span>
+            </label>`).join('')}
+          </div>
+        </fieldset>
+        <label class="suggest-edit"><input id="draft-suggest" type="checkbox" ${mock.suggestion ? 'checked' : ''}> Suggest an edit</label>
+        ${mock.suggestion ? `<label class="replacement" for="replacement">Proposed replacement</label><textarea id="replacement">${escapeText(mock.replacement)}</textarea>` : ''}
+        <div class="row between"><span class="footnote">${isLocal() ? 'This browser only' : ''}</span><button class="primary" data-action="post" ${mock.compose.trim() || mock.suggestion ? '' : 'disabled'}>${mock.suggestion ? 'Post suggestion' : 'Post comment'}</button></div>
+      </section>`;
+    }
+
+    function railMarkup() {
+      const added = mock.posted && mock.postedKind === 'new' ? 1 : 0;
+      const blockingAdded = added && mock.postedIntent === 'blocking' ? 1 : 0;
+      return `<aside class="comments-rail" aria-label="Comments">
+        <div class="rail-head">
+          <h3>Comments</h3>
+          <div class="summary-counts">${2 - Number(mock.resolved) + added} open &middot; <span class="blockers">${1 - Number(mock.resolved) + blockingAdded} blocking</span> &middot; 0 waiting on you</div>
+          <div class="filters" role="group" aria-label="Filter comments">
+            <div class="filter-fields">
+              <label>Search comments<input id="filter-search" type="search" value="${escapeText(mock.search)}" placeholder="Text, author, or quote"></label>
+              <div class="two">
+                <label>Show<select id="thread-filter">
+                  <option value="open" ${mock.filter === 'open' ? 'selected' : ''}>Open</option>
+                  <option value="all" ${mock.filter === 'all' ? 'selected' : ''}>All</option>
+                  <option value="blocking" ${mock.filter === 'blocking' ? 'selected' : ''}>Blocking</option>
+                  <option value="mine" ${mock.filter === 'mine' ? 'selected' : ''}>Mine</option>
+                  <option value="anchor" ${mock.filter === 'anchor' ? 'selected' : ''}>Needs re-anchor</option>
+                </select></label>
+                <label>Sort<select id="thread-sort">
+                  <option value="newest" ${mock.sort === 'newest' ? 'selected' : ''}>Newest</option>
+                  <option value="oldest" ${mock.sort === 'oldest' ? 'selected' : ''}>Oldest</option>
+                  <option value="blocking" ${mock.sort === 'blocking' ? 'selected' : ''}>Blocking first</option>
+                </select></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="thread-list" id="proposed-threads">
+          ${newThreadMarkup()}${firstThread()}
+          <div class="thread-card" data-thread="second" data-intent="question" data-resolved="false">
+            <blockquote>three working days</blockquote><span class="tag">Question</span>
+            ${mock.scenario === 'anchor' ? '<div class="receipt failed">Could not locate this quote in the document.</div>' : ''}
+            <div class="byline"><strong>Jordan</strong><span>09:12</span></div>
+            <p>Does this include the regional review?</p>
+            <div class="thread-actions"><button class="quiet" data-action="second-thread">Open thread</button></div>
+          </div>
+          <p id="empty-filter" class="receipt" hidden>No comments match these filters.</p>
+        </div>
+        ${!mock.hintDismissed && !mock.editing ? '<div class="inline-hint"><p>Highlight a passage to comment.</p><button class="icon quiet" data-action="dismiss-hint" title="Dismiss commenting hint" aria-label="Dismiss commenting hint">&times;</button></div>' : ''}
+        ${mock.editing ? '' : composerMarkup()}
+      </aside>`;
+    }
+
+    function editorMarkup() {
+      const preview = `<article class="document"><div class="eyebrow">DRAFT / NOT SAVED TO SOURCE</div><h2>Launch readiness</h2><p class="draft-preview">${escapeText(mock.editorText)}</p></article>`;
+      const editor = `<textarea id="document-draft" aria-label="Document draft" spellcheck="true">${escapeText(mock.editorText)}</textarea>`;
+      return `<div class="editor-surface ${mock.editorView === 'split' ? 'split' : ''}">${mock.editorView === 'preview' ? preview : mock.editorView === 'split' ? editor + preview : editor}</div>`;
+    }
+
+    function renderProposed() {
+      const inaccessible = mock.scenario === 'access';
+      proposedApp.innerHTML = sourceHeader() + statusMarkup() + noticeMarkup() + (mock.editing ? `<div class="editor-toolbar"><div class="row"><div class="segmented" role="group" aria-label="Editor view"><button data-action="editor-view" data-editor-view="editor" aria-pressed="${mock.editorView === 'editor'}">Editor</button><button data-action="editor-view" data-editor-view="split" aria-pressed="${mock.editorView === 'split'}">Split</button><button data-action="editor-view" data-editor-view="preview" aria-pressed="${mock.editorView === 'preview'}">Preview</button></div><label class="field-inline"><input type="checkbox" checked id="spellcheck"> Spell check</label><button data-action="apply-draft">Apply draft</button><button data-action="exit-editor">Exit editor</button></div></div>` : '') + (inaccessible ? '<div class="access-empty"><h2>This document could not be opened</h2><p>Your current GitHub identity does not have confirmed access to this file, or the file is unavailable.</p><div class="source-box"><strong>Requested: docs/launch-plan.md</strong><code>example/handbook @ main</code></div><p>A review invitation does not grant source access. Sign in with an authorized account, check the link, or ask the source owner for access.</p><div class="row"><button data-action="signin">Sign in with GitHub</button><button data-action="source">Open another document</button></div></div>' : `<div class="app-body">${mock.editing ? editorMarkup() : documentMarkup(true)}${railMarkup()}</div>`);
+      filterThreads();
+    }
+
+    function filterThreads() {
+      const cards = Array.from(proposedApp.querySelectorAll('[data-thread]'));
+      cards.forEach(card => {
+        const searchMatch = card.textContent.toLowerCase().includes(mock.search.toLowerCase());
+        const unresolved = card.dataset.resolved !== 'true';
+        const filterMatch = mock.filter === 'blocking' ? card.dataset.intent === 'blocking' && unresolved : mock.filter === 'mine' ? false : mock.filter === 'anchor' ? mock.scenario === 'anchor' : mock.filter === 'open' ? unresolved : true;
+        card.hidden = !searchMatch || !filterMatch;
+      });
+      const list = proposedApp.querySelector('#proposed-threads');
+      const rank = { new: 0, first: 1, second: 2 };
+      cards.sort((left, right) => mock.sort === 'oldest' ? rank[right.dataset.thread] - rank[left.dataset.thread] : mock.sort === 'blocking' ? Number(right.dataset.intent === 'blocking') - Number(left.dataset.intent === 'blocking') : rank[left.dataset.thread] - rank[right.dataset.thread]);
+      if (list) cards.forEach(card => list.append(card));
+      const empty = document.getElementById('empty-filter');
+      if (empty) empty.hidden = cards.some(card => !card.hidden);
+    }
+
+    function renderScenario(value, preserveInput = false) {
+      if (dialog.open) dialog.close();
+      mock.scenario = value;
+      if (!preserveInput) {
+      mock.source = sourceName;
+      mock.editing = value === 'editor';
+      mock.editorDirty = ['switch', 'editor', 'applied'].includes(value);
+      mock.editorText = draftInitial + (mock.editorDirty ? '\nException review closes on Friday.\n' : '');
+      mock.compose = value === 'switch' ? 'Could we include the regional rollback check in this window?' : '';
+      mock.composing = value === 'switch';
+      mock.posted = false;
+      mock.postedBody = '';
+      mock.postedKind = 'new';
+      mock.quote = selectedSentence;
+      mock.intent = 'question';
+      mock.suggestion = false;
+      mock.replacement = selectedSentence;
+      mock.editorView = 'editor';
+      mock.reply = '';
+      mock.replyOpen = false;
+      mock.resolved = false;
+      mock.filter = 'open';
+      mock.search = '';
+      mock.sort = 'newest';
+      mock.draftExported = false;
+      }
+      document.getElementById('scenario').value = value;
+      document.getElementById('scenario-title').textContent = scenarios[value].title;
+      document.getElementById('scenario-description').textContent = scenarios[value].description;
+      document.getElementById('proposed-caption').textContent = scenarios[value].caption;
+      renderCurrent();
+      renderProposed();
+      announce('');
+    }
+
+    function openDialog(title, body, actions = '<button data-action="close-dialog">Close</button>') {
+      if (!dialog.open) mock.dialogOpener = mock.lastActionTrigger?.isConnected ? mock.lastActionTrigger : document.activeElement;
+      dialog.innerHTML = `<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button class="icon quiet" data-action="close-dialog" title="Close dialog" aria-label="Close dialog">&times;</button></div><div class="dialog-body">${body}</div><div class="dialog-actions">${actions}</div>`;
+      if (!dialog.open) dialog.showModal();
+      else dialog.querySelector('button')?.focus();
+    }
+
+    function closeDialog() {
+      dialog.close();
+      if (mock.dialogOpener?.isConnected) mock.dialogOpener.focus();
+      else proposedApp.querySelector('#tools-menu > summary')?.focus();
+    }
+
+    function unsavedText() {
+      const localFeedback = mock.scenario === 'ado' ? 'Alex: Do we need the rollback check before this is announced?\nRobin: The regional check is still outstanding. [unsent]' : mock.postedBody || 'Do we need the rollback check before this is announced?';
+      const documentDraft = mock.scenario === 'ado' ? '(no document edit in this work-item scenario)' : mock.editorText;
+      return `Source: ${sourceBinding()}\nThis is a recovery copy, not a source-save receipt.\n\nUnsent comment:\n${mock.compose || '(none)'}\n\nUnsent reply:\n${mock.reply || '(none)'}\n\nDocument draft:\n${documentDraft}\n\nLocal feedback:\n${localFeedback}\n`;
+    }
+
+    function sourceGuard(exitEditor = false) {
+      openDialog(exitEditor ? 'Leave this document draft?' : 'Leave with unsent input?', `<p class="source-bound">${repositoryName} / <strong>${escapeText(mock.source)}</strong> @ main</p><p>This input has not been saved. Leaving or reloading may lose it.</p>`, `<button data-action="export-from-guard">Inspect / export</button><button class="danger" data-action="${exitEditor ? 'discard-editor' : 'discard-switch'}">${exitEditor ? 'Discard and exit' : 'Discard and switch'}</button><button class="primary" data-action="close-dialog">Stay here</button>`);
+    }
+
+    function openSource() {
+      if (operationActive()) { announce('Source switching is held while work for launch-plan.md is active. No operation was cancelled.'); return; }
+      if (mock.compose.trim() || mock.reply.trim() || mock.editorDirty) { sourceGuard(); return; }
+      openDialog('Open document', '<label for="next-source">Document URL</label><input id="next-source" value="https://github.com/example/handbook/blob/main/docs/operations.md"><p class="source-bound">Source-provider access still applies.</p><label>Recently viewed</label><button data-action="load-next">docs/operations.md &middot; main</button><p><button class="quiet" data-action="sample">Open sample</button></p>', '<button data-action="close-dialog">Cancel</button><button class="primary" data-action="load-next">Open</button>');
+    }
+
+    function showExport() {
+      openDialog('Unsent input', `<p class="source-bound">${escapeText(sourceBinding())}</p><label for="recovery-text">Recovery copy</label><textarea id="recovery-text" rows="10" readonly>${escapeText(unsavedText())}</textarea><p id="export-status" role="status"></p>`, '<button data-action="close-dialog">Keep working</button><button data-action="copy-draft">Copy text</button><button class="primary" data-action="download-draft">Download recovery copy</button>');
+    }
+
+    function shareDialog() {
+      const link = 'https://example.invalid/review?source=launch-plan';
+      openDialog('Share for review', `<p class="source-bound">${repositoryName} / ${escapeText(mock.source)} @ main</p><p>Reviewers need source access. An invitation does not grant it.</p><label for="share-link">Review link</label><div class="copy-row"><input id="share-link" readonly value="${escapeText(link)}"><button data-action="copy-link">Copy link</button></div><p id="copy-status" role="status"></p><label for="share-emails">Email invitation (optional)</label><input id="share-emails" type="email" placeholder="reviewer@example.invalid">`, '<button data-action="close-dialog">Close</button><button data-action="mock-invite">Send invite</button>');
+    }
+
+    async function copyThreadLink(button) {
+      const threadId = button.closest('[data-thread]')?.dataset.thread || 'first';
+      const link = `https://example.invalid/review?source=launch-plan&thread=${threadId}`;
+      try {
+        if (document.getElementById('simulate-copy-failure').checked) throw new Error('Simulated clipboard rejection');
+        await navigator.clipboard.writeText(link);
+        button.textContent = 'Copied';
+      } catch {
+        openDialog('Copy thread link', `<p class="source-bound">${escapeText(sourceBinding())}</p><p role="status">Clipboard unavailable. Select and copy the link below.</p><label for="thread-link-fallback">Thread link</label><input id="thread-link-fallback" readonly value="${escapeText(link)}">`);
+        document.getElementById('thread-link-fallback').focus();
+        document.getElementById('thread-link-fallback').select();
+      }
+    }
+
+    async function copyValue(value, outputId, inputId, forceFailure = false) {
+      const output = document.getElementById(outputId);
+      try {
+        if (forceFailure) throw new Error('Simulated clipboard rejection');
+        await navigator.clipboard.writeText(value);
+        output.textContent = 'Copied.';
+      } catch {
+        output.textContent = 'Clipboard unavailable. Select and copy the text in the field.';
+        output.className = 'dialog-error';
+        document.getElementById(inputId).focus();
+        document.getElementById(inputId).select();
+      }
+    }
+
+    function handleAction(action, button) {
+      if (action === 'close-dialog') { closeDialog(); return; }
+      if (action === 'share') { shareDialog(); return; }
+      if (action === 'copy-thread') { void copyThreadLink(button); return; }
+      if (action === 'copy-link') { void copyValue(document.getElementById('share-link').value, 'copy-status', 'share-link', document.getElementById('simulate-copy-failure').checked); return; }
+      if (action === 'copy-draft') { void copyValue(unsavedText(), 'export-status', 'recovery-text'); return; }
+      if (action === 'export' || action === 'export-from-guard') { showExport(); return; }
+      if (action === 'download-draft') {
+        const blobUrl = URL.createObjectURL(new Blob([unsavedText()], { type: 'text/plain;charset=utf-8' }));
+        const download = document.createElement('a');
+        download.href = blobUrl;
+        download.download = mock.scenario === 'ado' ? 'work-item-1042-local-feedback.txt' : 'launch-plan-unsent-recovery.txt';
+        download.click();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+        mock.draftExported = true;
+        document.getElementById('export-status').textContent = 'Download requested.';
+        return;
+      }
+      if (action === 'source') { openSource(); return; }
+      if (action === 'exit-editor') { if (mock.editorDirty) sourceGuard(true); else { mock.editing = false; renderProposed(); } return; }
+      if (action === 'discard-editor') { dialog.close(); mock.editing = false; mock.editorDirty = false; mock.editorText = draftInitial; renderProposed(); announce('Mockup: document draft discarded. No source write.'); return; }
+      if (action === 'discard-switch') { dialog.close(); mock.compose = ''; mock.reply = ''; mock.editorDirty = false; openSource(); return; }
+      if (action === 'load-next' || action === 'sample') {
+        closeDialog();
+        announce(`Mockup boundary inspected: ${action === 'sample' ? 'Sample' : 'docs/operations.md'} would open next. No source is fetched or relabelled in this mockup; the existing fixture still belongs to launch-plan.md.`);
+        return;
+      }
+      if (action === 'edit') { mock.editing = true; mock.composing = false; renderProposed(); proposedApp.querySelector('#document-draft')?.focus(); return; }
+      if (action === 'editor-view') { mock.editorView = button.dataset.editorView; renderProposed(); if (mock.editorView === 'split') announce('Mockup: Split uses the existing editor/preview capability; the narrow layout keeps the editor visible.'); return; }
+      if (action === 'apply-draft' || action === 'save-source') {
+        openDialog(`Save edits to ${escapeText(mock.source)}?`, '<p>Commit to main, or create a pull request for these changes.</p><p class="source-bound">A pull request leaves main unchanged until it is merged.</p>', '<button data-action="close-dialog">Keep in this tab</button><button data-action="mock-pr">Create pull request</button><button class="primary" data-action="mock-commit">Commit to main</button>');
+        return;
+      }
+      if (action === 'mock-commit' || action === 'mock-pr' || action === 'mock-invite') {
+        announce(`Mockup only: ${action === 'mock-invite' ? 'no invitation sent' : 'no source request sent'}. Use the scenario selector to inspect a confirmed or failed outcome.`);
+        dialog.close();
+        return;
+      }
+      if (action === 'retry') { renderScenario('saving', true); announce('Simulated retry is pending; existing input is retained. It will not automatically turn into a successful save.'); return; }
+      if (action === 'select-passage') { mock.composing = true; renderProposed(); document.getElementById('draft-comment')?.focus(); return; }
+      if (action === 'dismiss-hint') { mock.hintDismissed = true; renderProposed(); return; }
+      if (action === 'reply') { mock.replyOpen = true; renderProposed(); document.getElementById('draft-reply')?.focus(); return; }
+      if (action === 'close-reply') { mock.replyOpen = false; renderProposed(); return; }
+      if (action === 'post' || action === 'post-reply') {
+        const body = action === 'post' ? mock.compose.trim() : mock.reply.trim();
+        if (!body && !mock.suggestion) return;
+        mock.posted = true;
+        mock.postedBody = body || 'Suggested change';
+        mock.postedKind = action === 'post' ? 'new' : 'reply';
+        mock.postedQuote = mock.quote;
+        mock.postedIntent = mock.intent;
+        mock.hintDismissed = true;
+        mock.compose = '';
+        mock.reply = '';
+        mock.composing = false;
+        mock.replyOpen = false;
+        renderProposed();
+        announce('Mockup: comment added to the visible fixture. No shared-save or notification success has been asserted.');
+        return;
+      }
+      if (action === 'resolve') { mock.resolved = !mock.resolved; renderProposed(); announce(mock.resolved ? 'Mockup: Resolved.' : 'Mockup: Reopened.'); return; }
+      if (action === 'passage') { const passage = proposedApp.querySelector('.passage'); passage?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); passage?.focus({ preventScroll: true }); return; }
+      if (action === 'recovery') { openDialog('Local and shared feedback', '<p class="source-bound">Example / Product / Work item #1042</p><label>Local copy, not confirmed shared</label><textarea readonly aria-label="Local ADO feedback">Alex: Do we need the rollback check before this is announced?\nRobin: The regional check is still outstanding. [unsent]</textarea><label>Last shared snapshot</label><textarea readonly aria-label="Shared ADO feedback">Alex: Do we need the rollback check before this is announced?</textarea>', '<button data-action="export-from-guard">Export local copy</button><button class="primary" data-action="close-dialog">Stay on this work item</button>'); return; }
+      if (action === 'ai' || action === 'ai-thread') { openDialog(action === 'ai-thread' ? 'Draft a fix for this thread' : 'AI Review', '<p class="source-bound">launch-plan.md / main</p><div class="row"><span class="tag">Local check</span><span class="tag">Draft finding</span></div><p><strong>Specify the review window</strong></p><p>The review window does not specify a start date.</p><details><summary>REVIEW.md / skill (optional)</summary><label>Path or URL</label><input placeholder="REVIEW.md or skill URL"><label>Pasted skill</label><textarea placeholder="Optional skill content"></textarea></details>', '<button data-action="close-dialog">Dismiss</button><button data-action="finding-thread">Post as thread</button>'); return; }
+      if (action === 'finding-thread') { dialog.close(); mock.postedBody = 'Local-check finding: clarify the review window.'; mock.posted = true; mock.postedKind = 'new'; mock.postedQuote = 'three working days'; mock.postedIntent = 'question'; renderProposed(); announce('Mockup: local-check finding added as a thread fixture. Shared save is not confirmed.'); return; }
+      if (action === 'summary') { openDialog('Review summary', '<span class="tag">Generated locally</span><p><strong>Blocking (1)</strong><br>Rollback check before announcement.</p><p><strong>Question (1)</strong><br>Regional review window.</p>'); return; }
+      if (action === 'delete-thread') { openDialog('Delete this thread?', '<blockquote>Do we need the rollback check before this is announced?</blockquote>', '<button data-action="close-dialog">Keep thread</button><button class="danger" data-action="mock-delete">Delete</button>'); return; }
+      if (action === 'mock-delete') { dialog.close(); announce('Mockup: deletion confirmation inspected. No real thread was deleted.'); return; }
+      if (action === 'signin') { openDialog('Sign in with GitHub', '<p>Use an account with access to this source.</p><p>Local comments stay local until you choose to publish them under your name.</p>'); return; }
+      if (action === 'inbox') { openDialog('Notifications', '<p>No new notifications.</p>'); return; }
+      if (action === 'account') { openDialog('Account', '<p>Robin / GitHub</p>'); return; }
+      if (action === 'posted-thread') { openDialog('Posted comment', `<blockquote>${escapeText(mock.postedQuote)}</blockquote><p>${escapeText(mock.postedBody)}</p><p class="source-bound">Shared save not yet confirmed.</p>`); return; }
+      if (action === 'second-thread') { openDialog('Regional review', '<blockquote>three working days</blockquote><p><strong>Jordan:</strong> Does this include the regional review?</p>'); }
+    }
+
+    document.querySelectorAll('button[data-view]').forEach(button => button.addEventListener('click', () => {
+      comparison.dataset.view = button.dataset.view;
+      document.querySelectorAll('button[data-view]').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
+    }));
+    document.getElementById('scenario').addEventListener('change', event => renderScenario(event.target.value));
+    document.getElementById('annotations').addEventListener('change', event => document.body.classList.toggle('no-annotations', !event.target.checked));
+    document.addEventListener('click', event => {
+      const button = event.target.closest('[data-action]');
+      if (button) {
+        if (!dialog.contains(button)) mock.lastActionTrigger = button;
+        handleAction(button.dataset.action, button);
+      }
+    });
+    proposedApp.addEventListener('input', event => {
+      const field = event.target;
+      if (field.id === 'draft-comment') {
+        mock.compose = field.value;
+        proposedApp.querySelector('[data-action="post"]').disabled = !mock.compose.trim() && !mock.suggestion;
+      }
+      if (field.id === 'draft-reply') mock.reply = field.value;
+      if (field.id === 'replacement') mock.replacement = field.value;
+      if (field.id === 'document-draft') { mock.editorText = field.value; mock.editorDirty = field.value !== draftInitial; const preview = proposedApp.querySelector('.draft-preview'); if (preview) preview.textContent = field.value; }
+      if (field.id === 'filter-search') { mock.search = field.value; filterThreads(); }
+    });
+    proposedApp.addEventListener('change', event => {
+      if (event.target.name === 'draft-intent') mock.intent = event.target.value;
+      if (event.target.id === 'draft-suggest') { mock.suggestion = event.target.checked; renderProposed(); }
+      if (event.target.id === 'thread-filter') { mock.filter = event.target.value; filterThreads(); }
+      if (event.target.id === 'thread-sort') { mock.sort = event.target.value; filterThreads(); }
+      if (event.target.id === 'spellcheck') proposedApp.querySelector('#document-draft')?.setAttribute('spellcheck', String(event.target.checked));
+    });
+    function captureSelection() {
+      if (mock.editing) return;
+      const selection = window.getSelection();
+      if (!selection || selection.isCollapsed || !selection.rangeCount) return;
+      const documentBody = proposedApp.querySelector('.document');
+      if (!documentBody?.contains(selection.getRangeAt(0).commonAncestorContainer)) return;
+      const quote = selection.toString().trim();
+      if (!quote) return;
+      if (mock.compose.trim()) { announce('The existing unsent comment is kept with its original passage. Post it or export it before selecting a new passage.'); return; }
+      mock.quote = quote;
+      mock.replacement = quote;
+      mock.composing = true;
+      renderProposed();
+      document.getElementById('draft-comment')?.focus();
+    }
+    proposedApp.addEventListener('mouseup', captureSelection);
+    proposedApp.addEventListener('keyup', event => { if (event.key === 'Shift') captureSelection(); });
+    proposedApp.addEventListener('keydown', event => {
+      if (event.target.matches('mark[data-action]') && ['Enter', ' '].includes(event.key)) { event.preventDefault(); handleAction('select-passage', event.target); }
+    });
+    dialog.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        closeDialog();
+      }
+    });
+    dialog.addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
+    renderScenario('review');
+  </script>
+</body>
+</html>

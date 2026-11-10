@@ -1,0 +1,35 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - '*'
+  paths:
+    include:
+      - '*.md'
+      - '**/*.md'
+      - '.docthread/**'
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+    fetchDepth: 0
+
+  - pwsh: |
+      $targetBranch = '$(System.PullRequest.TargetBranch)' -replace '^refs/heads/', ''
+      git fetch origin $targetBranch
+      if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      $baseSha = git merge-base "origin/$targetBranch" HEAD
+      $env:DOCTHREAD_BASE_SHA = $baseSha
+      $env:DOCTHREAD_HEAD_SHA = '$(Build.SourceVersion)'
+      $env:DOCTHREAD_PROVIDER = 'azure-repos'
+      $env:DOCTHREAD_COLLECTION_URI = '$(System.CollectionUri)'
+      $env:DOCTHREAD_PROJECT = '$(System.TeamProject)'
+      $env:DOCTHREAD_REPOSITORY = '$(Build.Repository.Name)'
+      $env:DOCTHREAD_REF = '$(Build.SourceVersion)'
+      $env:DOCTHREAD_SUMMARY_PATH = '$(Agent.TempDirectory)/docthread-review-summary.md'
+      node .azuredevops/docthread-review.mjs
+      Write-Host "##vso[task.uploadsummary]$env:DOCTHREAD_SUMMARY_PATH"
+    displayName: Summarize DocThread review

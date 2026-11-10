@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DocThread — UI Redesign Prototype (#128)</title>
+<style>
+  :root{
+    --brand:#0f6cbd; --brand-hover:#115ea3; --brand-tint:#eff6fc;
+    --ink:#242424; --ink-2:#424242; --muted:#616161; --faint:#8a8a8a;
+    --line:#e0e0e0; --line-2:#d1d1d1; --bg:#fafafa; --surface:#ffffff;
+    --canvas:#f5f5f5; --amber:#f7e9c0; --amber-line:#e6b800;
+    --q:#0f6cbd; --s:#8764b8; --b:#c50f1f;
+    --shadow:0 1.6px 3.6px rgba(0,0,0,.08),0 .3px .9px rgba(0,0,0,.06);
+    --shadow-2:0 4px 12px rgba(0,0,0,.12);
+    --radius:6px;
+    font-family:'Segoe UI','Aptos',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+  .wrap{max-width:1280px;margin:0 auto;padding:16px}
+  .banner{background:#fff4ce;border:1px solid #f2d98d;border-radius:var(--radius);padding:10px 14px;font-size:13px;color:#6b5900;margin-bottom:14px;display:flex;gap:10px;align-items:center}
+  .banner b{color:#4a3d00}
+  .modeswitch{margin-left:auto;display:inline-flex;border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:#fff}
+  .modeswitch button{border:0;background:#fff;padding:5px 12px;font:inherit;font-size:12px;cursor:pointer;color:var(--ink-2)}
+  .modeswitch button.on{background:var(--brand);color:#fff;font-weight:600}
+
+  /* App shell */
+  .app{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
+  .topbar{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface)}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--ink)}
+  .logo .mark{width:22px;height:22px;border-radius:5px;background:linear-gradient(135deg,#0f6cbd,#2b88d8);display:inline-block}
+  .docpill{font-size:12px;color:var(--muted);background:var(--canvas);border:1px solid var(--line);border-radius:20px;padding:3px 10px;display:flex;gap:6px;align-items:center}
+  .spacer{flex:1}
+  .btn{font:inherit;font-size:13px;border:1px solid var(--line-2);background:#fff;color:var(--ink-2);border-radius:var(--radius);padding:6px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .btn:hover{background:var(--canvas)}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+  .btn.primary:hover{background:var(--brand-hover)}
+  .btn.subtle{border-color:transparent;background:transparent;color:var(--muted)}
+  .btn.subtle:hover{background:var(--canvas)}
+  .avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7a7a7a,#9a9a9a);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+
+  /* Tools menu */
+  .menu-wrap{position:relative}
+  .menu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow-2);width:264px;padding:6px;display:none;z-index:20}
+  .menu.open{display:block}
+  .menu .mi{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:6px;cursor:pointer}
+  .menu .mi:hover{background:var(--canvas)}
+  .menu .mi .ic{font-size:16px;line-height:1.2}
+  .menu .mi .t{font-weight:600;font-size:13px;color:var(--ink)}
+  .menu .mi .d{font-size:11.5px;color:var(--muted)}
+  .menu .sep{height:1px;background:var(--line);margin:5px 4px}
+  .menu .gh{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--faint);padding:6px 10px 3px}
+
+  /* Body layout */
+  .body{display:grid;grid-template-columns:1fr 340px;min-height:560px}
+  .doc{padding:34px 44px;overflow:auto;border-right:1px solid var(--line)}
+  .doc h1{font-size:26px;font-weight:650;margin-bottom:6px;letter-spacing:-.3px}
+  .doc .sub{color:var(--muted);border-left:3px solid var(--line-2);padding:6px 0 6px 14px;margin:14px 0 22px;font-size:13.5px}
+  .doc h2{font-size:18px;font-weight:640;margin:26px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .doc p{margin:10px 0;color:var(--ink-2)}
+  .hl{background:#fff3bf;border-radius:3px;padding:0 2px;cursor:pointer;border-bottom:2px solid #e6b800}
+  .hl.s{background:#efe6fb;border-bottom-color:#8764b8}
+  .hl.b{background:#fde0e2;border-bottom-color:#c50f1f}
+
+  /* Comments rail */
+  .rail{background:#fcfcfc;display:flex;flex-direction:column}
+  .rail-head{padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+  .rail-title{display:flex;align-items:center;gap:8px;font-weight:650;font-size:14px}
+  .rail-sub{font-size:12px;color:var(--muted);margin-top:3px}
+  .chip{font-size:11px;font-weight:600;border-radius:20px;padding:2px 9px;border:1px solid var(--line-2);color:var(--ink-2);background:#fff;cursor:pointer}
+  .chip.active{background:var(--brand-tint);border-color:#9fc4ea;color:var(--brand)}
+  .rail-tools{display:flex;gap:6px;margin-top:10px;align-items:center}
+  .disclose{font-size:12px;color:var(--brand);cursor:pointer;background:none;border:0;font-weight:600;display:inline-flex;gap:4px;align-items:center}
+  .adv{display:none;margin-top:8px;gap:6px;flex-wrap:wrap}
+  .adv.open{display:flex}
+  .threads{padding:12px 14px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:10px}
+  .card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:11px 12px}
+  .card.active{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-tint)}
+  .card .q{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:6px}
+  .tag{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:1px 7px;border-radius:4px}
+  .tag.q{background:#eaf3fb;color:#0f6cbd}
+  .tag.s{background:#f0eafb;color:#6c40b5}
+  .tag.b{background:#fdeaec;color:#b3121f}
+  .card .who{font-size:12px;color:var(--ink);margin:6px 0 2px;font-weight:600}
+  .card .ctext{font-size:13px;color:var(--ink-2)}
+  .card .acts{display:flex;gap:8px;margin-top:8px}
+  .card .acts .btn{padding:4px 10px;font-size:12px}
+  .composer{border-top:1px solid var(--line);padding:12px 14px;background:#fff}
+  .composer textarea{width:100%;border:1px solid var(--line-2);border-radius:6px;padding:8px 10px;font:inherit;font-size:13px;resize:none;min-height:52px}
+  .composer .intents{display:flex;gap:6px;margin:8px 0}
+  .composer .row{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+
+  /* First-run coach */
+  .coach{position:absolute;left:50%;top:120px;transform:translateX(-50%);background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-2);border-radius:10px;padding:14px 16px;width:320px;z-index:15;text-align:center}
+  .coach .em{font-size:24px}
+  .coach h4{margin:6px 0 4px;font-size:14px}
+  .coach p{font-size:12.5px;color:var(--muted)}
+  .coach .btn{margin-top:10px}
+  .docwrap{position:relative}
+
+  .legend{margin-top:14px;font-size:12px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap}
+  .legend b{color:var(--ink-2)}
+  .note{margin-top:10px;font-size:12px;color:var(--faint)}
+
+  /* "Today" overlay */
+  #today{display:none}
+  .cluttered .top2{display:flex;gap:6px;flex-wrap:wrap}
+  .cluttered .top2 .btn{font-size:12px;padding:5px 9px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">
+    <span>🎨</span>
+    <span><b>Prototype for review — DocThread UI redesign (issue #128).</b> Not implemented yet. Shows the proposed <b>Review-first</b> experience: clean default, tools tucked away, progressive disclosure, first-run coach, Fluent styling.</span>
+    <span class="modeswitch">
+      <button id="mProto" class="on" onclick="showMode('proto')">Proposed</button>
+      <button id="mToday" onclick="showMode('today')">Today</button>
+    </span>
+  </div>
+
+  <!-- PROPOSED -->
+  <div id="proto" class="app">
+    <div class="topbar">
+      <span class="logo"><span class="mark"></span>DocThread</span>
+      <span class="docpill">📄 DocThread — User Manual &amp; Guided Tour <span style="color:var(--faint)">· main</span></span>
+      <span class="spacer"></span>
+      <button class="btn subtle" title="Edit the document">✏️ Edit</button>
+      <button class="btn" onclick="toggleShare()">🔗 Share</button>
+      <span class="menu-wrap">
+        <button class="btn subtle" onclick="toggleMenu(event)" title="Tools">⋯ Tools</button>
+        <div class="menu" id="toolsMenu">
+          <div class="gh">AI assist</div>
+          <div class="mi"><span class="ic">✨</span><div><div class="t">AI Review</div><div class="d">Readiness score + anchored findings &amp; fixes</div></div></div>
+          <div class="mi"><span class="ic">📝</span><div><div class="t">Summarize review</div><div class="d">Grouped digest of open threads</div></div></div>
+          <div class="sep"></div>
+          <div class="gh">Document</div>
+          <div class="mi"><span class="ic">✏️</span><div><div class="t">Edit document</div><div class="d">Split editor with live preview</div></div></div>
+          <div class="mi"><span class="ic">🔀</span><div><div class="t">Load a different source</div><div class="d">Paste a GitHub / Azure Repos / ADO URL</div></div></div>
+        </div>
+      </span>
+      <span class="avatar" title="Signed in as mayast">MS</span>
+    </div>
+
+    <div class="body">
+      <div class="docwrap">
+        <div class="doc">
+          <h1>📘 DocThread — User Manual &amp; Guided Tour</h1>
+          <div class="sub"><b>This is sample content — a safe playground.</b> Highlight a sentence, leave a comment, reply, resolve, and explore.</div>
+          <h2>What DocThread does</h2>
+          <p>DocThread brings Word-style inline review to Markdown files and Azure DevOps work items. Reviewers highlight <span class="hl">rendered text and start threaded discussions</span> right where the content lives — no pull-request detours and no exporting to Word and back.</p>
+          <h2>Bring your own document</h2>
+          <p>Start here when you want to review real content. <span class="hl s">Paste a GitHub file link</span>, an Azure Repos file link, or an Azure DevOps work item link into the bar at the top.</p>
+          <h2>Leave your first comment</h2>
+          <p><span class="hl b">Select any text</span> in this document with your mouse. A composer appears — type your feedback and choose an intent. Your note is anchored to that exact phrase.</p>
+        </div>
+        <div class="coach" id="coach">
+          <div class="em">💬</div>
+          <h4>Highlight a sentence to comment</h4>
+          <p>Select any text, then leave a note. That's the whole thing — everything else is optional.</p>
+          <button class="btn primary" onclick="document.getElementById('coach').style.display='none'">Got it</button>
+        </div>
+      </div>
+
+      <div class="rail">
+        <div class="rail-head">
+          <div class="rail-title">💬 Comments <span style="color:var(--faint);font-weight:500">· 3 open</span></div>
+          <div class="rail-sub">1 blocking · 0 waiting on you</div>
+          <div class="rail-tools">
+            <span class="chip active">Open</span>
+            <button class="disclose" onclick="toggleAdv()">⚙️ Filters &amp; AI ▾</button>
+          </div>
+          <div class="adv" id="adv">
+            <span class="chip">Question 1</span><span class="chip">Suggestion 1</span><span class="chip">Blocking 1</span>
+            <span class="chip">Mine 0</span><span class="chip">✨ AI Review</span><span class="chip">📝 Summarize</span>
+          </div>
+        </div>
+        <div class="threads">
+          <div class="card active">
+            <div class="q">"before it can ship"</div>
+            <span class="tag b">Blocking</span>
+            <div class="who">Priya (Reviewer) · 10:31 AM</div>
+            <div class="ctext">This is a Blocking issue — the strongest intent. Use it sparingly for things that genuinely can't ship as-is.</div>
+            <div class="acts"><button class="btn primary">Reply</button><button class="btn">Resolve</button></div>
+          </div>
+          <div class="card">
+            <div class="q">"choose an intent"</div>
+            <span class="tag s">Suggestion</span>
+            <div class="who">Sam (PM) · 10:20 AM</div>
+            <div class="ctext">Consider a one-line tooltip that explains each intent the first time someone comments.</div>
+            <div class="acts"><button class="btn primary">Reply</button><button class="btn">Resolve</button></div>
+          </div>
+          <div class="card">
+            <div class="q">"rendered text and start…"</div>
+            <span class="tag q">Question</span>
+            <div class="who">You · just now</div>
+            <div class="ctext">Does this also work on private repos?</div>
+            <div class="acts"><button class="btn primary">Reply</button><button class="btn">Resolve</button></div>
+          </div>
+        </div>
+        <div class="composer">
+          <textarea placeholder="Comment on the highlighted text…"></textarea>
+          <div class="intents"><span class="chip active">Question</span><span class="chip">Suggestion</span><span class="chip">Blocking</span></div>
+          <div class="row"><span style="font-size:11.5px;color:var(--faint)">Anchored to your selection</span><button class="btn primary">Comment</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODAY -->
+  <div id="today" class="app cluttered">
+    <div class="topbar">
+      <span class="logo"><span class="mark"></span>DocThread <span style="font-size:11px;color:var(--faint);font-weight:400">Sample · local</span></span>
+      <input style="flex:1;padding:6px 10px;border:1px solid var(--line-2);border-radius:6px;font-size:12px" placeholder="Paste a GitHub, Azure Repos, or ADO work item URL">
+      <span class="top2">
+        <button class="btn primary">Load</button><button class="btn">Save review</button>
+        <button class="btn">Edit doc</button><button class="btn">Sample</button>
+        <button class="btn">🔔</button>
+      </span>
+      <span class="avatar">MS</span><button class="btn">Sign out</button>
+    </div>
+    <div class="body">
+      <div class="doc">
+        <h1>📘 DocThread — User Manual &amp; Guided Tour</h1>
+        <div class="sub"><b>This is sample content.</b> Highlight a sentence, leave a comment, reply, resolve, edit, and explore.</div>
+        <h2>What DocThread does</h2>
+        <p>DocThread brings Word-style inline review to Markdown files and Azure DevOps work items.</p>
+        <h2>Bring your own document</h2>
+        <p>Start here when you want to review real content. Paste a GitHub file link.</p>
+      </div>
+      <div class="rail">
+        <div class="rail-head">
+          <div class="rail-title">Review status</div>
+          <div class="top2" style="margin-top:8px">
+            <button class="btn">✨ Summarize</button><button class="btn">🎯 Assess PRD Readiness</button><button class="btn">🔎 Run AI review</button>
+          </div>
+          <div class="rail-sub" style="margin-top:8px">3 open · 1 blocking · 0 waiting on you</div>
+          <div class="rail-tools" style="flex-wrap:wrap">
+            <span class="chip active">Open 3</span><span class="chip">Question 1</span><span class="chip">Suggestion 1</span>
+            <span class="chip">Blocking 1</span><span class="chip">Mine 0</span><span class="chip">Needs re-anchor 0</span><span class="chip">All 4</span>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:6px"><input style="flex:1;padding:5px 8px;border:1px solid var(--line-2);border-radius:6px;font-size:12px" placeholder="Search comments, authors…"><select style="border:1px solid var(--line-2);border-radius:6px;font-size:12px"><option>Newest</option></select></div>
+        </div>
+        <div class="threads">
+          <div class="card"><span class="tag b">Blocking</span><div class="who">Priya (Reviewer)</div><div class="ctext">This is a Blocking issue…</div><div class="acts"><button class="btn primary">Reply</button><button class="btn">Resolve</button><button class="btn">Delete</button><button class="btn">Copy link</button></div></div>
+          <div class="card"><span class="tag s">Suggestion</span><div class="who">Sam (PM)</div><div class="ctext">Consider a one-line tooltip…</div><div class="acts"><button class="btn primary">Reply</button><button class="btn">Resolve</button><button class="btn">Delete</button><button class="btn">Copy link</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><b>What changed:</b></span>
+    <span>① One primary action (<b>Comment</b>)</span>
+    <span>② AI/analytics behind <b>⋯ Tools</b></span>
+    <span>③ Filters collapsed (<b>progressive disclosure</b>)</span>
+    <span>④ <b>First-run coach</b></span>
+    <span>⑤ Fluent styling &amp; hierarchy</span>
+  </div>
+  <div class="note">Static mockup for direction review only — real content/logic unchanged. Toggle <b>Today</b> to compare against the current UI.</div>
+</div>
+
+<script>
+  function toggleMenu(e){e.stopPropagation();document.getElementById('toolsMenu').classList.toggle('open');}
+  function toggleAdv(){document.getElementById('adv').classList.toggle('open');}
+  function toggleShare(){alert('Share for review — link + email invite (shipped, #111). Shown here as a single primary top-bar action.');}
+  function showMode(m){
+    document.getElementById('proto').style.display = m==='proto'?'block':'none';
+    document.getElementById('today').style.display = m==='today'?'block':'none';
+    document.getElementById('mProto').classList.toggle('on',m==='proto');
+    document.getElementById('mToday').classList.toggle('on',m==='today');
+  }
+  document.addEventListener('click',()=>document.getElementById('toolsMenu').classList.remove('open'));
+</script>
+</body>
+</html>

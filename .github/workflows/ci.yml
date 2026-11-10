@@ -1,0 +1,73 @@
+name: CI
+
+# Runs on every pull request, and on main after merge so the badge reflects
+# the branch people actually deploy from.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A newer push to the same branch supersedes an in-flight run. Two Pages
+# deploys were already cancelled by collisions on main; this keeps that
+# behaviour explicit rather than incidental.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # .npmrc points at the Microsoft package proxy, so this also proves the
+      # supply-chain path still resolves.
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      # 'build' is 'tsc && vite build', so this is the type check as well as
+      # the bundle. It is the step that would have caught the mention-picker
+      # type error before it reached main.
+      - name: Build
+        run: npm run build
+
+  browser:
+    name: browser (${{ matrix.engine }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Install browser
+        run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Browser and accessibility checks
+        env:
+          DOCTHREAD_TEST_BROWSERS: ${{ matrix.engine }}
+        run: npm run test:browser
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-ui-${{ matrix.engine }}
+          path: node_modules/.cache/review-ui/
+          if-no-files-found: warn

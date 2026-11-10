@@ -1,0 +1,37 @@
+{
+  "name": "docthread",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Word-style inline reviews for Markdown, in GitHub. Microsoft Global Hackathon 2026.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "pretest": "node --test --experimental-strip-types tests/reviewUi.test.ts tests/reviewSessionInsights.test.ts",
+    "test:browser": "node scripts/test-browser.mjs",
+    "test": "node --test --experimental-strip-types tests/source.test.ts tests/githubPublic.test.ts tests/azureRepos.test.ts tests/ado.test.ts tests/adoSnapshot.test.ts tests/oauth-api.test.mjs tests/identity.test.ts tests/mentions.test.ts tests/notifyEmail.test.ts tests/notifyAllowlist.test.ts tests/review.test.ts tests/reviewSchema.test.ts tests/reviewPersistence.test.ts tests/notification.test.ts tests/recents.test.ts tests/reviewSummary.test.ts tests/threadLink.test.ts tests/reactions.test.ts tests/inbox.test.ts tests/notifyTeams.test.ts tests/editorPrefs.test.ts tests/markdownToolbar.test.ts tests/suggestion.test.ts tests/aiSkill.test.ts tests/aiSuggest.test.ts tests/readiness.test.ts tests/reviewPolicy.test.ts tests/aiReview.test.ts tests/shareReview.test.ts tests/requestReview.test.ts .github/scripts/docthread-review.test.mjs && pwsh -NoProfile -File tests/install-content-repo.test.ps1",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@azure/msal-browser": "5.18.0",
+    "@octokit/rest": "^21.0.2",
+    "diff-match-patch": "^1.0.5",
+    "lucide-react": "1.40.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
+    "turndown": "7.2.4"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@types/diff-match-patch": "^1.0.36",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/turndown": "5.0.6",
+    "@vitejs/plugin-react": "^4.3.4",
+    "playwright": "1.63.0",
+    "typescript": "^5.6.3",
+    "vite": "7.3.6"
+  }
+}
